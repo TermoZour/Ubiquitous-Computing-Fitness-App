@@ -1,24 +1,21 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import {Provider as PaperProvider} from 'react-native-paper';
+import {NavigationContainer} from "@react-navigation/native";
+import {createNativeStackNavigator} from "@react-navigation/native-stack";
 
-import { Provider as PaperProvider } from 'react-native-paper';
+import Wizard from "./app/Wizard";
+import ScanBarcode from "./app/ScanBarcode";
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     <PaperProvider>
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <StatusBar style="auto" />
-      </View>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Wizard">
+          <Stack.Screen name="Wizard" component={Wizard} />
+          <Stack.Screen name="ScanBarcode" component={ScanBarcode} />
+        </Stack.Navigator>
+      </NavigationContainer>
     </PaperProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
