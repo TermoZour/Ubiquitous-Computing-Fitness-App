@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
-import { View } from 'react-native';
-import { Text, Button } from 'react-native-paper';
+import { ScrollView, View } from 'react-native';
+import { Text, Button, Card, Title } from 'react-native-paper';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { WIZARD_STATUS, WIZARD_NAME, WIZARD_TRUE_STATE } from './StorageKeys';
 
 import VerticalBarGraph from './VerticalBarGraph';
-
 
 export default function Dashboard({ navigation }) {
   const [wizardDone, setWizardDone] = useState(true);
@@ -48,8 +47,8 @@ export default function Dashboard({ navigation }) {
   }, [])
 
   return (
-    <View style={{ padding: 10 }}>
-      <Text>Hello, {name}</Text>
+    <View style={{ flex: 1, padding: 10 }}>
+      <Text variant="headlineLarge">Hello, {name}</Text>
 
       <VerticalBarGraph
         columns={[
@@ -57,6 +56,51 @@ export default function Dashboard({ navigation }) {
           { title: "carbs", value: 30, color: "#00ff00" },
           { title: "fiber", value: 45, color: "#0000ff" }]}
         maxRange="200" />
+
+      <Text variant="headlineSmall">Meals</Text>
+      <ScrollView>
+        <Card>
+          <Card.Content>
+            <Title>Breakfast</Title>
+          </Card.Content>
+          <Card.Actions>
+            <Button>Add meal</Button>
+          </Card.Actions>
+        </Card>
+        <Card mode="contained">
+          <Card.Content>
+            <Title>Morning Snack</Title>
+          </Card.Content>
+          <Card.Actions>
+            <Button>Add meal</Button>
+          </Card.Actions>
+        </Card>
+        <Card>
+          <Card.Content>
+            <Title>Lunch</Title>
+          </Card.Content>
+          <Card.Actions>
+            <Button>Add meal</Button>
+          </Card.Actions>
+        </Card>
+        <Card mode="contained">
+          <Card.Content>
+            <Title>Afternoon Snack</Title>
+          </Card.Content>
+          <Card.Actions>
+            <Button>Add meal</Button>
+          </Card.Actions>
+        </Card>
+        <Card>
+          <Card.Content>
+            <Title>Dinner</Title>
+          </Card.Content>
+          <Card.Actions>
+            <Button>Add meal</Button>
+          </Card.Actions>
+        </Card>
+      </ScrollView>
+
 
       <Button onPress={() => navigation.navigate('ScanBarcode')}>Stuff</Button>
     </View>
