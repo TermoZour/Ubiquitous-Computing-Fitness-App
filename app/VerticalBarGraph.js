@@ -5,8 +5,8 @@ import VerticalBar from "./VerticalBar"
 export default function VerticalBarGraph({ columns, maxRange }) {
   return (
     <Surface style={[styles.graphBackground, { height: parseInt(maxRange) }]}>
-      {columns.map((column) =>
-        <VerticalBar title={column["title"]} color={column["color"]} height={column["value"]} width="20" bottomText={column["value"] + "g"} />
+      {columns.map((column, key) =>
+        <VerticalBar key={key} title={column["title"]} color={column["color"]} height={column["value"]} width="20" bottomText={column["value"] + "g"} />
       )}
     </Surface>
   )
