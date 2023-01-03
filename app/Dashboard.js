@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { WIZARD_STATUS, WIZARD_NAME, WIZARD_TRUE_STATE, DayEntry, Meal } from './StorageKeys';
 
 import VerticalBarGraph from './VerticalBarGraph';
+import MealsView from './MealsView';
 
 export default function Dashboard({ navigation }) {
   const [wizardDone, setWizardDone] = useState(true);
@@ -41,11 +42,17 @@ export default function Dashboard({ navigation }) {
   // get meal data from AsyncStorage to later be used for components
   const getMealData = async () => {
     try {
-      console.log(`Fetching data from ${date.getFullYear + (date.getMonth + 1)}`);
-      const data = await AsyncStorage.getItem(date.getFullYear + (date.getMonth + 1));
+      month = "";
+      if (date.getMonth() + 1 <= 9) {
+        month = "0" + (date.getMonth() + 1);
+      }
+
+      console.log(`Fetching data from ${date.getFullYear()}${month}`);
+      const data = await AsyncStorage.getItem("" + date.getFullYear() + month);
       if (data !== null) {
-        // update states
-        setMealData(data);
+        console.log("Meal data from Dashboard: ");
+        console.log(data);
+        setMealData(JSON.parse(data));
       }
     } catch (e) {
       console.error(e);
@@ -62,40 +69,28 @@ export default function Dashboard({ navigation }) {
     }
     getName();
 
-    console.log(`Today's date: ${date}`)
+    console.log(`Today's date: ${date}`);
 
-    const data = {
-      'week': 1,
-      'breakfast': [
-        {
-          'name': 'sandwich',
-          'grams': 0,
-          'portions': 0,
-          'carbs': 0,
-          'fiber': 0,
-          'protein': 0,
-        }
-      ],
-      'morning_snack': [{}],
-      'lunch': [{}],
-      'afternoon_snack': [{}],
-      'dinner': [{}]
-    }
-    const dayEntry = new DayEntry(1, 3, new Meal("Sandwich"))
-    // AsyncStorage.setItem("202312", JSON.stringify(data))
-    AsyncStorage.removeItem("202212");
+    getMealData();
+
+    const dayEntry = new DayEntry(1, 3, new Meal("Sandwich"));
+    AsyncStorage.setItem("202301", JSON.stringify(dayEntry));
+    // AsyncStorage.removeItem("202212");
   }, [])
 
   return (
-    <View style={{ flex: 1, padding: 10 }}>
-      <Text variant="headlineLarge">Hello, {name}</Text>
+    <View style={{ flex: 1 }}>
+      <View style={{ marginStart: 10, marginEnd: 10 }}>
+        <Text variant="headlineLarge">Hello, {name}</Text>
 
-      <VerticalBarGraph
-        columns={[
-          { title: "protein", value: 120, color: "#ff0000" },
-          { title: "carbs", value: 30, color: "#00ff00" },
-          { title: "fiber", value: 45, color: "#0000ff" }]}
-        maxRange="200" />
+        {/* <IntakeGraph mealData={mealData} /> */}
+        <VerticalBarGraph
+          columns={[
+            { title: "protein", value: 120, color: "#ff0000" },
+            { title: "carbs", value: 30, color: "#00ff00" },
+            { title: "fiber", value: 45, color: "#0000ff" }]}
+          maxRange="200" />
+      </View>
 
       <View style={styles.mealsHeaderContainer}>
         <IconButton icon="arrow-left" />
@@ -104,49 +99,7 @@ export default function Dashboard({ navigation }) {
         <IconButton icon="arrow-right" />
       </View>
 
-      <ScrollView>
-        <Card key='0'>
-          <Card.Content>
-            <Title>Breakfast</Title>
-          </Card.Content>
-          <Card.Actions>
-            <Button>Add meal</Button>
-          </Card.Actions>
-        </Card>
-        <Card key='1' mode="contained">
-          <Card.Content>
-            <Title>Morning Snack</Title>
-          </Card.Content>
-          <Card.Actions>
-            <Button>Add meal</Button>
-          </Card.Actions>
-        </Card>
-        <Card key='2'>
-          <Card.Content>
-            <Title>Lunch</Title>
-          </Card.Content>
-          <Card.Actions>
-            <Button>Add meal</Button>
-          </Card.Actions>
-        </Card>
-        <Card key='3' mode="contained">
-          <Card.Content>
-            <Title>Afternoon Snack</Title>
-          </Card.Content>
-          <Card.Actions>
-            <Button>Add meal</Button>
-          </Card.Actions>
-        </Card>
-        <Card key='4'>
-          <Card.Content>
-            <Title>Dinner</Title>
-          </Card.Content>
-          <Card.Actions>
-            <Button>Add meal</Button>
-          </Card.Actions>
-        </Card>
-      </ScrollView>
-
+      <MealsView mealData={mealData} />
 
       <Button onPress={() => navigation.navigate('ScanBarcode')}>Stuff</Button>
     </View>
