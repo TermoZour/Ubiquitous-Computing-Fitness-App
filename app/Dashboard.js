@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react';
-import { ScrollView, View } from 'react-native';
-import { Text, Button, Card, Title } from 'react-native-paper';
+import { ScrollView, View, StyleSheet } from 'react-native';
+import { Text, Button, Card, Title, IconButton } from 'react-native-paper';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { WIZARD_STATUS, WIZARD_NAME, WIZARD_TRUE_STATE } from './StorageKeys';
+import { WIZARD_STATUS, WIZARD_NAME, WIZARD_TRUE_STATE, DayEntry, Meal } from './StorageKeys';
 
 import VerticalBarGraph from './VerticalBarGraph';
 
 export default function Dashboard({ navigation }) {
   const [wizardDone, setWizardDone] = useState(true);
   const [name, setName] = useState("Human");
+  const [date, setDate] = useState(new Date());
+  const [mealData, setMealData] = useState(null);
 
   const checkWizardStatus = () => {
     try {
@@ -36,6 +38,21 @@ export default function Dashboard({ navigation }) {
     }
   }
 
+  // get meal data from AsyncStorage to later be used for components
+  const getMealData = async () => {
+    try {
+      console.log(`Fetching data from ${date.getFullYear + (date.getMonth + 1)}`);
+      const data = await AsyncStorage.getItem(date.getFullYear + (date.getMonth + 1));
+      if (data !== null) {
+        // update states
+        setMealData(data);
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Failed to fetch meal data");
+    }
+  }
+
 
   useEffect(() => {
     checkWizardStatus();
@@ -44,6 +61,29 @@ export default function Dashboard({ navigation }) {
       navigation.navigate("Wizard")
     }
     getName();
+
+    console.log(`Today's date: ${date}`)
+
+    const data = {
+      'week': 1,
+      'breakfast': [
+        {
+          'name': 'sandwich',
+          'grams': 0,
+          'portions': 0,
+          'carbs': 0,
+          'fiber': 0,
+          'protein': 0,
+        }
+      ],
+      'morning_snack': [{}],
+      'lunch': [{}],
+      'afternoon_snack': [{}],
+      'dinner': [{}]
+    }
+    const dayEntry = new DayEntry(1, 3, new Meal("Sandwich"))
+    // AsyncStorage.setItem("202312", JSON.stringify(data))
+    AsyncStorage.removeItem("202212");
   }, [])
 
   return (
@@ -57,9 +97,15 @@ export default function Dashboard({ navigation }) {
           { title: "fiber", value: 45, color: "#0000ff" }]}
         maxRange="200" />
 
-      <Text variant="headlineSmall">Meals</Text>
+      <View style={styles.mealsHeaderContainer}>
+        <IconButton icon="arrow-left" />
+        <Text style={styles.mealsHeaderText} variant="headlineSmall">Meals of </Text>
+        <Text style={styles.mealsHeaderText} variant="headlineSmall">{date.getDay() + 1}/{date.getMonth() + 1}/{date.getFullYear()}</Text>
+        <IconButton icon="arrow-right" />
+      </View>
+
       <ScrollView>
-        <Card>
+        <Card key='0'>
           <Card.Content>
             <Title>Breakfast</Title>
           </Card.Content>
@@ -67,7 +113,7 @@ export default function Dashboard({ navigation }) {
             <Button>Add meal</Button>
           </Card.Actions>
         </Card>
-        <Card mode="contained">
+        <Card key='1' mode="contained">
           <Card.Content>
             <Title>Morning Snack</Title>
           </Card.Content>
@@ -75,7 +121,7 @@ export default function Dashboard({ navigation }) {
             <Button>Add meal</Button>
           </Card.Actions>
         </Card>
-        <Card>
+        <Card key='2'>
           <Card.Content>
             <Title>Lunch</Title>
           </Card.Content>
@@ -83,7 +129,7 @@ export default function Dashboard({ navigation }) {
             <Button>Add meal</Button>
           </Card.Actions>
         </Card>
-        <Card mode="contained">
+        <Card key='3' mode="contained">
           <Card.Content>
             <Title>Afternoon Snack</Title>
           </Card.Content>
@@ -91,7 +137,7 @@ export default function Dashboard({ navigation }) {
             <Button>Add meal</Button>
           </Card.Actions>
         </Card>
-        <Card>
+        <Card key='4'>
           <Card.Content>
             <Title>Dinner</Title>
           </Card.Content>
@@ -106,3 +152,12 @@ export default function Dashboard({ navigation }) {
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  mealsHeaderContainer: {
+    flexDirection: "row"
+  },
+  mealsHeaderText: {
+    alignSelf: 'center'
+  }
+})
