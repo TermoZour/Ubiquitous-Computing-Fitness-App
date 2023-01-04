@@ -20,9 +20,7 @@ export class Meal {
 }
 
 export class DayEntry {
-  constructor(week = 1, day = 1, breakfast = [], morning_snack = [], lunch = [], afternoon_snack = [], dinner = []) {
-    this.week = week;
-    this.day = day;
+  constructor(breakfast = [], morning_snack = [], lunch = [], afternoon_snack = [], dinner = []) {
     this.breakfast = breakfast;
     this.morning_snack = morning_snack;
     this.lunch = lunch;

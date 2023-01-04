@@ -52,7 +52,8 @@ export default function Dashboard({ navigation }) {
       if (data !== null) {
         console.log("Meal data from Dashboard: ");
         console.log(data);
-        setMealData(JSON.parse(data));
+        console.log(`Today's day is: ${date.getDay() + 1}`);
+        setMealData(JSON.parse(data)[date.getDay()]);
       }
     } catch (e) {
       console.error(e);
@@ -73,8 +74,8 @@ export default function Dashboard({ navigation }) {
 
     getMealData();
 
-    const dayEntry = new DayEntry(1, 3, new Meal("Sandwich"));
-    AsyncStorage.setItem("202301", JSON.stringify(dayEntry));
+    const day2Entry = new DayEntry([new Meal("Sandwich")], [], [new Meal("Soup")], [], [])
+    AsyncStorage.setItem("202301", JSON.stringify([null, null, null, day2Entry]));
     // AsyncStorage.removeItem("202212");
   }, [])
 
