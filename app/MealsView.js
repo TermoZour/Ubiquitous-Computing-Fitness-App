@@ -38,16 +38,12 @@ export default function MealsView({ mealData }) {
 
   return (
     <View style={{ flex: 1 }}>
-      {mealData == null ? <ActivityIndicator /> :
         <View>
-          {/* <Text>Week: {mealData.week}</Text> */}
-          {/* <Text>Day: {mealData.day}</Text> */}
           <ScrollView>
             <Card style={styles.mealCard} key='0'>
               <Card.Content>
                 <Title>Breakfast</Title>
-                {breakfast.map(entry => <MealEntry meal={entry} />)}
-                {/* <MealEntry meal={breakfast} /> */}
+              {mealData != null ? breakfast.map(entry => <MealEntry meal={entry} />) : <Text>No meal recorded.</Text>}
               </Card.Content>
               <Card.Actions>
                 <Button>Add meal</Button>
@@ -56,8 +52,7 @@ export default function MealsView({ mealData }) {
             <Card style={styles.mealCard} key='1' mode="contained">
               <Card.Content>
                 <Title>Morning Snack</Title>
-                {morningSnack.map(entry => <MealEntry meal={entry} />)}
-                <MealEntry meal={morningSnack} />
+              {mealData != null ? morningSnack.map(entry => <MealEntry meal={entry} />) : <Text>No meal recorded.</Text>}
               </Card.Content>
               <Card.Actions>
                 <Button>Add meal</Button>
@@ -66,7 +61,7 @@ export default function MealsView({ mealData }) {
             <Card style={styles.mealCard} key='2'>
               <Card.Content>
                 <Title>Lunch</Title>
-                {lunch.map(entry => <MealEntry meal={entry} />)}
+              {mealData != null ? lunch.map(entry => <MealEntry meal={entry} />) : <Text>No meal recorded.</Text>}
               </Card.Content>
               <Card.Actions>
                 <Button>Add meal</Button>
@@ -75,7 +70,7 @@ export default function MealsView({ mealData }) {
             <Card style={styles.mealCard} key='3' mode="contained">
               <Card.Content>
                 <Title>Afternoon Snack</Title>
-                {afternoonSnack.map(entry => <MealEntry meal={entry} />)}
+              {mealData != null ? afternoonSnack.map(entry => <MealEntry meal={entry} />) : <Text>No meal recorded.</Text>}
               </Card.Content>
               <Card.Actions>
                 <Button>Add meal</Button>
@@ -84,7 +79,7 @@ export default function MealsView({ mealData }) {
             <Card style={styles.mealCard} key='4'>
               <Card.Content>
                 <Title>Dinner</Title>
-                {dinner.map(entry => <MealEntry meal={entry} />)}
+              {mealData != null ? dinner.map(entry => <MealEntry meal={entry} />) : <Text>No meal recorded.</Text>}
               </Card.Content>
               <Card.Actions>
                 <Button>Add meal</Button>
@@ -92,8 +87,6 @@ export default function MealsView({ mealData }) {
             </Card>
           </ScrollView>
         </View>
-
-      }
     </View>
   )
 }
