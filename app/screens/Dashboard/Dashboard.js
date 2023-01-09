@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { useEffect, useState, useRef, useMemo } from 'react';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { Text, Button, IconButton } from 'react-native-paper';
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { WIZARD_STATUS, WIZARD_NAME, WIZARD_TRUE_STATE, DayEntry, Meal } from './StorageKeys';
+import { WIZARD_STATUS, WIZARD_NAME, WIZARD_TRUE_STATE, DayEntry, Meal } from '../../StorageKeys';
 
-import VerticalBarGraph from './VerticalBarGraph';
-import MealsView from './MealsView';
+import VerticalBarGraph from '../../components/VerticalBarGraph/VerticalBarGraph';
+import MealsView from '../../MealsView';
 
 export default function Dashboard({ navigation }) {
   const [wizardDone, setWizardDone] = useState(true);
@@ -100,28 +101,31 @@ export default function Dashboard({ navigation }) {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <View style={{ marginStart: 10, marginEnd: 10 }}>
-        <Text variant="headlineLarge">Hello, {name}</Text>
+      <ScrollView>
+        <View style={{ marginStart: 10, marginEnd: 10 }}>
+          <Text variant="headlineLarge">Hello, {name}</Text>
 
-        {/* <IntakeGraph mealData={mealData} /> */}
-        <VerticalBarGraph
-          columns={[
-            { title: "protein", value: 120, color: "#ff0000" },
-            { title: "carbs", value: 30, color: "#00ff00" },
-            { title: "fiber", value: 45, color: "#0000ff" }]}
-          maxRange="200" />
-      </View>
+          {/* <IntakeGraph mealData={mealData} /> */}
+          <VerticalBarGraph
+            columns={[
+              { title: "protein", value: 120, color: "#ff0000" },
+              { title: "carbs", value: 30, color: "#00ff00" },
+              { title: "fiber", value: 45, color: "#0000ff" }]}
+            maxRange="200" />
+        </View>
 
-      <View style={styles.mealsHeaderContainer}>
-        <IconButton icon="arrow-left" onPress={() => decreaseDate()} />
-        <Text style={styles.mealsHeaderText} variant="headlineSmall">Meals of </Text>
-        <Text style={styles.mealsHeaderText} variant="headlineSmall">{date.getDate()}/{date.getMonth() + 1}/{date.getFullYear()}</Text>
-        <IconButton icon="arrow-right" onPress={() => increaseDate()} />
-      </View>
+        <View style={styles.mealsHeaderContainer}>
+          <IconButton icon="arrow-left" onPress={() => decreaseDate()} />
+          <Text style={styles.mealsHeaderText} variant="headlineSmall">Meals of </Text>
+          <Text style={styles.mealsHeaderText} variant="headlineSmall">{date.getDate()}/{date.getMonth() + 1}/{date.getFullYear()}</Text>
+          <IconButton icon="arrow-right" onPress={() => increaseDate()} />
+        </View>
 
-      <MealsView mealData={mealData} />
+        <MealsView mealData={mealData} />
 
-      <Button onPress={() => navigation.navigate('ScanBarcode')}>Stuff</Button>
+        <Button onPress={() => navigation.navigate('ScanBarcode')}>Stuff</Button>
+      </ScrollView>
+
     </GestureHandlerRootView>
   )
 }

@@ -2,8 +2,8 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import Dashboard from './app/Dashboard';
-import Wizard from "./app/Wizard";
+import Dashboard from './app/screens/Dashboard/Dashboard';
+import Wizard from "./app/screens/Wizard/Wizard";
 import ScanBarcode from "./app/ScanBarcode";
 
 const Stack = createNativeStackNavigator();

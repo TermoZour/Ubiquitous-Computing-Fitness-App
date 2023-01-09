@@ -1,8 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import WizardQuestion1 from "./Wizard/WizardQuestion1";
-import WizardQuestion2 from "./Wizard/WizardQuestion2";
-import WizardQuestion3 from "./Wizard/WizardQuestion3";
+import WizardQuestion1 from "./WizardQuestions/WizardQuestion1";
+import WizardQuestion2 from "./WizardQuestions/WizardQuestion2";
+import WizardQuestion3 from "./WizardQuestions/WizardQuestion3";
 
 const Stack = createNativeStackNavigator();
 
