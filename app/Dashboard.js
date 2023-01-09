@@ -52,8 +52,8 @@ export default function Dashboard({ navigation }) {
       if (data !== null) {
         console.log("Meal data from Dashboard: ");
         console.log(data);
-        console.log(`Today's day is: ${date.getDay() + 1}`);
-        setMealData(JSON.parse(data)[date.getDay()]);
+        console.log(`Today's day is: ${date.getDate()}`);
+        setMealData(JSON.parse(data)[date.getDate() - 1]);
       }
     } catch (e) {
       console.error(e);
@@ -75,9 +75,27 @@ export default function Dashboard({ navigation }) {
     getMealData();
 
     const day2Entry = new DayEntry([new Meal("Sandwich")], [], [new Meal("Soup")], [], [])
-    AsyncStorage.setItem("202301", JSON.stringify([null, null, null, day2Entry]));
-    // AsyncStorage.removeItem("202212");
-  }, [])
+    AsyncStorage.setItem("202301", JSON.stringify([null, null, null, null, null, null, null, null, day2Entry]));
+    // AsyncStorage.removeItem("202301");
+  }, [date])
+
+  function increaseDate() {
+    const nowDay = date.getDate();
+    const newDate = new Date()
+
+    newDate.setDate(nowDay + 1);
+
+    setDate(newDate);
+  }
+
+  function decreaseDate() {
+    const nowDay = date.getDate();
+    const newDate = new Date()
+
+    newDate.setDate(nowDay - 1);
+
+    setDate(newDate);
+  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -94,10 +112,10 @@ export default function Dashboard({ navigation }) {
       </View>
 
       <View style={styles.mealsHeaderContainer}>
-        <IconButton icon="arrow-left" />
+        <IconButton icon="arrow-left" onPress={() => decreaseDate()} />
         <Text style={styles.mealsHeaderText} variant="headlineSmall">Meals of </Text>
-        <Text style={styles.mealsHeaderText} variant="headlineSmall">{date.getDay() + 1}/{date.getMonth() + 1}/{date.getFullYear()}</Text>
-        <IconButton icon="arrow-right" />
+        <Text style={styles.mealsHeaderText} variant="headlineSmall">{date.getDate()}/{date.getMonth() + 1}/{date.getFullYear()}</Text>
+        <IconButton icon="arrow-right" onPress={() => increaseDate()} />
       </View>
 
       <MealsView mealData={mealData} />
