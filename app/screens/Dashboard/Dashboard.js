@@ -1,8 +1,7 @@
-import { useEffect, useState, useRef, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { Text, Button, IconButton } from 'react-native-paper';
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { WIZARD_STATUS, WIZARD_NAME, WIZARD_TRUE_STATE, DayEntry, Meal } from '../../constants/StorageKeys';
@@ -101,7 +100,9 @@ export default function Dashboard({ navigation }) {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <ScrollView>
+      <ScrollView
+      // stickyHeaderIndices={[1]}  // the header gets weird UI when this is set
+      >
         <View style={{ marginStart: 10, marginEnd: 10 }}>
           <Text variant="headlineLarge">Hello, {name}</Text>
 
