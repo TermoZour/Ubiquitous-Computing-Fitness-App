@@ -3,7 +3,7 @@ import { View, StyleSheet } from "react-native"
 import { FAB, TextInput, Text } from "react-native-paper"
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { WIZARD_NAME } from "../../../StorageKeys";
+import { WIZARD_NAME } from "../../../constants/StorageKeys";
 
 export default function WizardQuestion1({ navigation }) {
   const [name, setName] = useState("");

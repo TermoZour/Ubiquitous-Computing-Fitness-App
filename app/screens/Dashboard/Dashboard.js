@@ -5,10 +5,10 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { WIZARD_STATUS, WIZARD_NAME, WIZARD_TRUE_STATE, DayEntry, Meal } from '../../StorageKeys';
+import { WIZARD_STATUS, WIZARD_NAME, WIZARD_TRUE_STATE, DayEntry, Meal } from '../../constants/StorageKeys';
 
 import VerticalBarGraph from '../../components/VerticalBarGraph/VerticalBarGraph';
-import MealsView from '../../MealsView';
+import MealsView from '../../components/MealsView/MealsView';
 
 export default function Dashboard({ navigation }) {
   const [wizardDone, setWizardDone] = useState(true);
@@ -121,7 +121,7 @@ export default function Dashboard({ navigation }) {
           <IconButton icon="arrow-right" onPress={() => increaseDate()} />
         </View>
 
-        <MealsView mealData={mealData} />
+        <MealsView mealData={mealData} navigation={navigation} />
 
         <Button onPress={() => navigation.navigate('ScanBarcode')}>Stuff</Button>
       </ScrollView>

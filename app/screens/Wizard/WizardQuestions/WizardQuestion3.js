@@ -2,7 +2,7 @@ import { StyleSheet, View } from "react-native";
 import { FAB, Text } from "react-native-paper";
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { WIZARD_STATUS, WIZARD_TRUE_STATE } from "../../../StorageKeys";
+import { WIZARD_STATUS, WIZARD_TRUE_STATE } from "../../../constants/StorageKeys";
 
 export default function WizardQuestion3({ navigation }) {
   const setWizardStatus = async (state) => {

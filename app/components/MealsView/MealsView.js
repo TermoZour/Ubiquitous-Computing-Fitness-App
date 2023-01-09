@@ -1,11 +1,10 @@
 import { useEffect, useState, useRef, useMemo } from "react";
 import { View, ScrollView, StyleSheet } from "react-native";
 import { Text, Card, Title, Button, Portal, Modal } from "react-native-paper";
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 
 import MealEntry from "./MealEntry";
 
-export default function MealsView({ mealData }) {
+export default function MealsView({ mealData, navigation }) {
   const [breakfast, setBreakfast] = useState([]);
   const [morningSnack, setMorningSnack] = useState([]);
   const [lunch, setLunch] = useState([]);
@@ -13,8 +12,6 @@ export default function MealsView({ mealData }) {
   const [dinner, setDinner] = useState([]);
   const [visible, setVisible] = useState(false);
 
-  const sheetRef = useRef(null);
-  const snapPoints = useMemo(() => ["100%"], []);
 
   const showModal = (mealType) => {
     console.log(mealType);
@@ -57,7 +54,7 @@ export default function MealsView({ mealData }) {
             {mealData != null ? breakfast.map(entry => <MealEntry meal={entry} />) : <Text>No meal recorded.</Text>}
           </Card.Content>
           <Card.Actions>
-            <Button onPress={() => showModal("breakfast")}>Add meal</Button>
+            <Button onPress={() => navigation.navigate("AddMeal", { mealType: "breakfast", mealData: mealData.breakfast })}>Add meal</Button>
           </Card.Actions>
         </Card>
         <Card style={styles.mealCard} key='1' mode="contained">
@@ -66,7 +63,7 @@ export default function MealsView({ mealData }) {
             {mealData != null && morningSnack.length > 0 ? morningSnack.map(entry => <MealEntry meal={entry} />) : <Text>No meal recorded.</Text>}
           </Card.Content>
           <Card.Actions>
-            <Button>Add meal</Button>
+            <Button onPress={() => navigation.navigate("AddMeal", { mealType: "morning_snack", mealData: mealData.morning_snack })}>Add meal</Button>
           </Card.Actions>
         </Card>
         <Card style={styles.mealCard} key='2'>
@@ -75,7 +72,7 @@ export default function MealsView({ mealData }) {
             {mealData != null && lunch.length > 0 ? lunch.map(entry => <MealEntry meal={entry} />) : <Text>No meal recorded.</Text>}
           </Card.Content>
           <Card.Actions>
-            <Button>Add meal</Button>
+            <Button onPress={() => navigation.navigate("AddMeal", { mealType: "lunch", mealData: mealData.lunch })}>Add meal</Button>
           </Card.Actions>
         </Card>
         <Card style={styles.mealCard} key='3' mode="contained">

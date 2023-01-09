@@ -3,7 +3,7 @@ import { View, StyleSheet } from "react-native"
 import { Text, TouchableRipple, FAB } from "react-native-paper"
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { WIZARD_BURN, WIZARD_GAIN, WIZARD_MAINTAIN, WIZARD_PROGRAM } from "../../../StorageKeys"
+import { WIZARD_BURN, WIZARD_GAIN, WIZARD_MAINTAIN, WIZARD_PROGRAM } from "../../../constants/StorageKeys"
 
 
 export default function WizardQuestion2({ navigation }) {
