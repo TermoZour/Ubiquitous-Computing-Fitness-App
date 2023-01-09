@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { ScrollView, View, StyleSheet } from 'react-native';
-import { Text, Button, Card, Title, IconButton } from 'react-native-paper';
+import { View, StyleSheet } from 'react-native';
+import { Text, Button, IconButton } from 'react-native-paper';
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { WIZARD_STATUS, WIZARD_NAME, WIZARD_TRUE_STATE, DayEntry, Meal } from './StorageKeys';
@@ -50,9 +51,9 @@ export default function Dashboard({ navigation }) {
       console.log(`Fetching data from ${date.getFullYear()}${month}`);
       const data = await AsyncStorage.getItem("" + date.getFullYear() + month);
       if (data !== null) {
-        console.log("Meal data from Dashboard: ");
-        console.log(data);
-        console.log(`Today's day is: ${date.getDate()}`);
+        // console.log("Meal data from Dashboard: ");
+        // console.log(data);
+        // console.log(`Today's day is: ${date.getDate()}`);
         setMealData(JSON.parse(data)[date.getDate() - 1]);
       }
     } catch (e) {
@@ -98,7 +99,7 @@ export default function Dashboard({ navigation }) {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={{ marginStart: 10, marginEnd: 10 }}>
         <Text variant="headlineLarge">Hello, {name}</Text>
 
@@ -121,7 +122,7 @@ export default function Dashboard({ navigation }) {
       <MealsView mealData={mealData} />
 
       <Button onPress={() => navigation.navigate('ScanBarcode')}>Stuff</Button>
-    </View>
+    </GestureHandlerRootView>
   )
 }
 
