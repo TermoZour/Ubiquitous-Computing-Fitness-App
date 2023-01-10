@@ -5,17 +5,13 @@ export const WIZARD_TRUE_STATE = 'true';
 export const WIZARD_MAINTAIN = '0';
 export const WIZARD_BURN = '1';
 export const WIZARD_GAIN = '2';
+export const MEAL_DB = '@MealDb';
 
-export class Meal {
-  constructor(name, grams = 1, grams_per_serving = 1, servings = 1, energy = 0, carbs = 0, protein = 0, fibre = 0) {
-    this.name = name;
-    this.grams = grams;
-    this.grams_per_serving = grams_per_serving;
-    this.servings = servings;
-    this.energy = energy;
-    this.carbs = carbs;
-    this.protein = protein;
-    this.fibre = fibre
+export class MealEntry {
+  constructor(id, amount, isGrams) {
+    this.id = id;
+    this.amount = amount;
+    this.isGrams = isGrams; // if true, amount is grams of meal. if false, amount is servings of meal.
   }
 }
 
@@ -27,23 +23,27 @@ export class DayEntry {
     this.afternoon_snack = afternoon_snack;
     this.dinner = dinner;
   }
-
-  // const data = {
-  //   'week': 1,
-  //   'day': 2,z
-  //   'breakfast': [
-  //     {
-  //       'name': 'sandwich',
-  //       'grams': 0,
-  //       'portions': 0,
-  //       'carbs': 0,
-  //       'fiber': 0,
-  //       'protein': 0,
-  //     }
-  //   ],
-  //   'morning_snack': [{}],
-  //   'lunch': [{}],
-  //   'afternoon_snack': [{}],
-  //   'dinner': [{}]
-  // }
 }
+
+export const mealDatabase = [
+  {
+    "id": 0,
+    "name": "Mozarella Sticks",
+    "grams": 240,
+    "energy_per_100g": 150,
+    "carbs_per_100g": 25,
+    "fibre_per_100g": 1.8,
+    "protein_per_100g": 11,
+    "servings": 12,
+    "energy_per_serving": 62,
+    "carbs_per_serving": 4.7,
+    "fibre_per_serving": 0.5,
+    "protein_per_serving": 2.1
+  },
+  {
+    "id": 1,
+    "name": "Breaded Chicken",
+    "grams": 100,
+    "energy_per_100g": 50
+  }
+]

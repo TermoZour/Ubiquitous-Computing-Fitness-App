@@ -4,16 +4,18 @@ import { Text, Button, IconButton } from 'react-native-paper';
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { WIZARD_STATUS, WIZARD_NAME, WIZARD_TRUE_STATE, DayEntry, Meal } from '../../constants/StorageKeys';
+import { WIZARD_STATUS, WIZARD_NAME, WIZARD_TRUE_STATE, DayEntry, MEAL_DB, mealDatabase } from '../../constants/StorageKeys';
 
 import VerticalBarGraph from '../../components/VerticalBarGraph/VerticalBarGraph';
 import MealsView from '../../components/MealsView/MealsView';
+import { MealEntry } from '../../constants/StorageKeys';
 
 export default function Dashboard({ navigation }) {
   const [wizardDone, setWizardDone] = useState(true);
   const [name, setName] = useState("Human");
   const [date, setDate] = useState(new Date());
-  const [mealData, setMealData] = useState(null);
+  const [mealData, setMealData] = useState();
+  const [isLoadingMealData, setIsLoadingMealData] = useState(true);
 
   const checkWizardStatus = () => {
     try {
@@ -55,6 +57,7 @@ export default function Dashboard({ navigation }) {
         // console.log(data);
         // console.log(`Today's day is: ${date.getDate()}`);
         setMealData(JSON.parse(data)[date.getDate() - 1]);
+        setIsLoadingMealData(false);
       }
     } catch (e) {
       console.error(e);
@@ -75,8 +78,9 @@ export default function Dashboard({ navigation }) {
 
     getMealData();
 
-    const day2Entry = new DayEntry([new Meal("Sandwich")], [], [new Meal("Soup")], [], [])
-    AsyncStorage.setItem("202301", JSON.stringify([null, null, null, null, null, null, null, null, day2Entry]));
+    const dayEntry = new DayEntry([new MealEntry(0, 4, false)], null, null, null, null);
+    AsyncStorage.setItem("202301", JSON.stringify([null, null, null, null, null, null, null, null, null, dayEntry]));
+    AsyncStorage.setItem(MEAL_DB, JSON.stringify(mealDatabase));
     // AsyncStorage.removeItem("202301");
   }, [date])
 
@@ -121,8 +125,8 @@ export default function Dashboard({ navigation }) {
           <Text style={styles.mealsHeaderText} variant="headlineSmall">{date.getDate()}/{date.getMonth() + 1}/{date.getFullYear()}</Text>
           <IconButton icon="arrow-right" onPress={() => increaseDate()} />
         </View>
+        {isLoadingMealData ? <></> : <MealsView mealData={mealData} navigation={navigation} />}
 
-        <MealsView mealData={mealData} navigation={navigation} />
 
         <Button onPress={() => navigation.navigate('ScanBarcode')}>Stuff</Button>
       </ScrollView>

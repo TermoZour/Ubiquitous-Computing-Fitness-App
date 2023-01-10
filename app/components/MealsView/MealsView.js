@@ -1,6 +1,8 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { Text, Card, Title, Button } from "react-native-paper";
+import { MEAL_DB } from "../../constants/StorageKeys";
 
 import MealEntry from "./MealEntry";
 
@@ -10,27 +12,58 @@ export default function MealsView({ mealData, navigation }) {
   const [lunch, setLunch] = useState([]);
   const [afternoonSnack, setAfternoonSnack] = useState([]);
   const [dinner, setDinner] = useState([]);
+  const [mealDatabase, setMealDatabase] = useState([]);
+
+  const fetchMealDatabase = async () => {
+    try {
+      const mealDatabase = await AsyncStorage.getItem(MEAL_DB);
+      if (mealDatabase !== null) {
+        setMealDatabase(JSON.parse(mealDatabase));
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Failed to fetch meal database");
+    }
+  }
+
+  useEffect(() => {
+    fetchMealDatabase();
+  }, [])
 
 
   useEffect(() => {
-    // search for data in asyncstorage based on current date.
-    // if data not found, create empty entry
-    // if data is found, read it and make the UI
-    // console.log(mealData);
-  },)
+    console.log("MealsView:");
+    console.log(mealData);
 
-  useEffect(() => {
-    // console.log("MealsView:");
-    // console.log(mealData);
+    console.log("Meals Database:");
+    console.log(mealDatabase);
 
     if (mealData != null) {
-      setBreakfast(mealData.breakfast);
-      setMorningSnack(mealData.morning_snack);
-      setLunch(mealData.lunch);
-      setAfternoonSnack(mealData.afternoon_snack);
-      setDinner(mealData.dinner);
+      // breakfast
+      if (mealData.breakfast != null) {
+        let newBreakfast = []
+        for (const mealEntry of mealData["breakfast"]) {
+          console.log("meal entry:");
+          console.log(mealEntry);
+
+          const meal = mealDatabase.find(entry => entry.id === mealEntry.id)
+          console.log("meal data found: ");
+          console.log(meal);
+
+          newBreakfast = [...newBreakfast, meal]; // TODO: PROCESS MEAL DATA AND OUTPUT CORRECT STUFF
+        }
+        console.log("new breakfast:");
+        console.log(newBreakfast);
+        // setBreakfast(newBreakfast);
+      }
+
+      // setBreakfast(mealData.breakfast);
+      // setMorningSnack(mealData.morning_snack);
+      // setLunch(mealData.lunch);
+      // setAfternoonSnack(mealData.afternoon_snack);
+      // setDinner(mealData.dinner);
     }
-  })
+  }, [mealDatabase])
 
   /*
   make add meal button create a modal (or new activity) which can take manual data of meal based on class input
