@@ -78,8 +78,8 @@ export default function Dashboard({ navigation }) {
 
     getMealData();
 
-    const dayEntry = new DayEntry([new MealEntry(0, 4, false)], null, null, null, null);
-    AsyncStorage.setItem("202301", JSON.stringify([null, null, null, null, null, null, null, null, null, dayEntry]));
+    const dayEntry = new DayEntry([new MealEntry(0, 4, false)], null, [new MealEntry(0, 4, false)], null, null);
+    AsyncStorage.setItem("202301", JSON.stringify([null, null, null, null, null, null, null, null, null, null, dayEntry]));
     AsyncStorage.setItem(MEAL_DB, JSON.stringify(mealDatabase));
     // AsyncStorage.removeItem("202301");
   }, [date])

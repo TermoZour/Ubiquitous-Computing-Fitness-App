@@ -12,7 +12,7 @@ export default function MealsView({ mealData, navigation }) {
   const [lunch, setLunch] = useState([]);
   const [afternoonSnack, setAfternoonSnack] = useState([]);
   const [dinner, setDinner] = useState([]);
-  const [mealDatabase, setMealDatabase] = useState([]);
+  const [mealDatabase, setMealDatabase] = useState(null);
 
   const fetchMealDatabase = async () => {
     try {
@@ -32,36 +32,42 @@ export default function MealsView({ mealData, navigation }) {
 
 
   useEffect(() => {
-    console.log("MealsView:");
-    console.log(mealData);
+    if (mealData != null && mealDatabase != null) {
+      // go through each meal type (breakfast, lunch, dinner, etc)
+      for (const entry in mealData) {
+        if (mealData[entry] != null) {
+          // go through each individual entry of said meal type
+          let newMealData = []
+          for (const mealEntry of mealData[entry]) {
+            const meal = mealDatabase.find(entry => entry.id === mealEntry.id)
+            const data = {
+              "meal": meal,
+              "entry": mealEntry
+            }
 
-    console.log("Meals Database:");
-    console.log(mealDatabase);
+            newMealData = [...newMealData, data];
+          }
 
-    if (mealData != null) {
-      // breakfast
-      if (mealData.breakfast != null) {
-        let newBreakfast = []
-        for (const mealEntry of mealData["breakfast"]) {
-          console.log("meal entry:");
-          console.log(mealEntry);
-
-          const meal = mealDatabase.find(entry => entry.id === mealEntry.id)
-          console.log("meal data found: ");
-          console.log(meal);
-
-          newBreakfast = [...newBreakfast, meal]; // TODO: PROCESS MEAL DATA AND OUTPUT CORRECT STUFF
+          // add meal data to correct meal category
+          switch (entry) {
+            case "breakfast":
+              setBreakfast(newMealData);
+              break;
+            case "morning_snack":
+              setMorningSnack(newMealData);
+              break;
+            case "lunch":
+              setLunch(newMealData);
+              break;
+            case "afternoon_snack":
+              setAfternoonSnack(newMealData);
+              break;
+            case "dinner":
+              setDinner(newMealData);
+              break;
+          }
         }
-        console.log("new breakfast:");
-        console.log(newBreakfast);
-        // setBreakfast(newBreakfast);
       }
-
-      // setBreakfast(mealData.breakfast);
-      // setMorningSnack(mealData.morning_snack);
-      // setLunch(mealData.lunch);
-      // setAfternoonSnack(mealData.afternoon_snack);
-      // setDinner(mealData.dinner);
     }
   }, [mealDatabase])
 
@@ -76,7 +82,7 @@ export default function MealsView({ mealData, navigation }) {
       <Card style={styles.mealCard}>
         <Card.Content>
           <Title>Breakfast</Title>
-          {mealData != null ? breakfast.map(entry => <MealEntry meal={entry} />) : <Text>No meal recorded.</Text>}
+          {mealData != null && breakfast.length > 0 ? breakfast.map(data => <MealEntry meal={data.meal} entry={data.entry} />) : <Text>No meal recorded.</Text>}
         </Card.Content>
         <Card.Actions>
           <Button onPress={() => navigation.navigate("AddMeal", { mealType: "breakfast", mealData: mealData.breakfast })}>Add meal</Button>
@@ -85,7 +91,7 @@ export default function MealsView({ mealData, navigation }) {
       <Card style={styles.mealCard} mode="contained">
         <Card.Content>
           <Title>Morning Snack</Title>
-          {mealData != null && morningSnack.length > 0 ? morningSnack.map(entry => <MealEntry meal={entry} />) : <Text>No meal recorded.</Text>}
+          {mealData != null && morningSnack.length > 0 ? morningSnack.map(data => <MealEntry meal={data.meal} entry={data.entry} />) : <Text>No meal recorded.</Text>}
         </Card.Content>
         <Card.Actions>
           <Button onPress={() => navigation.navigate("AddMeal", { mealType: "morning_snack", mealData: mealData.morning_snack })}>Add meal</Button>
@@ -94,7 +100,7 @@ export default function MealsView({ mealData, navigation }) {
       <Card style={styles.mealCard}>
         <Card.Content>
           <Title>Lunch</Title>
-          {mealData != null && lunch.length > 0 ? lunch.map(entry => <MealEntry meal={entry} />) : <Text>No meal recorded.</Text>}
+          {mealData != null && lunch.length > 0 ? lunch.map(data => <MealEntry meal={data.meal} entry={data.entry} />) : <Text>No meal recorded.</Text>}
         </Card.Content>
         <Card.Actions>
           <Button onPress={() => navigation.navigate("AddMeal", { mealType: "lunch", mealData: mealData.lunch })}>Add meal</Button>
@@ -103,7 +109,7 @@ export default function MealsView({ mealData, navigation }) {
       <Card style={styles.mealCard} mode="contained">
         <Card.Content>
           <Title>Afternoon Snack</Title>
-          {mealData != null && afternoonSnack.length > 0 ? afternoonSnack.map(entry => <MealEntry meal={entry} />) : <Text>No meal recorded.</Text>}
+          {mealData != null && afternoonSnack.length > 0 ? afternoonSnack.map(data => <MealEntry meal={data.meal} entry={data.entry} />) : <Text>No meal recorded.</Text>}
         </Card.Content>
         <Card.Actions>
           <Button>Add meal</Button>
@@ -112,7 +118,7 @@ export default function MealsView({ mealData, navigation }) {
       <Card style={styles.mealCard}>
         <Card.Content>
           <Title>Dinner</Title>
-          {mealData != null && dinner.length > 0 ? dinner.map(entry => <MealEntry meal={entry} />) : <Text>No meal recorded.</Text>}
+          {mealData != null && dinner.length > 0 ? dinner.map(data => <MealEntry meal={data.meal} entry={data.entry} />) : <Text>No meal recorded.</Text>}
         </Card.Content>
         <Card.Actions>
           <Button>Add meal</Button>
