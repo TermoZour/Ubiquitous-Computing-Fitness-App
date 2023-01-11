@@ -115,7 +115,7 @@ export default function Dashboard({ navigation }) {
             columns={[
               { title: "protein", value: 120, color: "#ff0000" },
               { title: "carbs", value: 30, color: "#00ff00" },
-              { title: "fiber", value: 45, color: "#0000ff" }]}
+              { title: "fibre", value: 75, color: "#0000ff" }]}
             maxRange="200" />
         </View>
 
@@ -125,10 +125,8 @@ export default function Dashboard({ navigation }) {
           <Text style={styles.mealsHeaderText} variant="headlineSmall">{date.getDate()}/{date.getMonth() + 1}/{date.getFullYear()}</Text>
           <IconButton icon="arrow-right" onPress={() => increaseDate()} />
         </View>
+
         {isLoadingMealData ? <></> : <MealsView mealData={mealData} navigation={navigation} />}
-
-
-        <Button onPress={() => navigation.navigate('ScanBarcode')}>Stuff</Button>
       </ScrollView>
 
     </GestureHandlerRootView>
