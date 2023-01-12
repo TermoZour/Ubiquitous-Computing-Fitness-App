@@ -5,10 +5,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function IntakeGraph({ mealData }) {
-  const [protein, setProtein] = useState(0);
-  const [carbs, setCarbs] = useState(0);
-  const [fibre, setFibre] = useState(0);
   const [mealDb, setMealDb] = useState(null);
+  const [columns, setColumns] = useState([]);
+  const [maxHeight, setMaxHeight] = useState(0);
 
   const getMealDb = async () => {
     try {
@@ -35,8 +34,6 @@ export default function IntakeGraph({ mealData }) {
         // console.log("found meal for ID " + mealId);
         // console.log(meal);
         return meal;
-
-
       } else {
         alert("Meal ID " + mealId + " not in database.");
         console.log("Meal ID " + mealId + " not in database.");
@@ -69,6 +66,7 @@ export default function IntakeGraph({ mealData }) {
           console.log(meal);
           if (mealIsGrams) {
             // calculating based on grams
+
             totalProtein += (mealAmount * meal.protein_per_100g) / 100;
             totalCarbs += (mealAmount * meal.carbs_per_100g) / 100;
             totalFibre += (mealAmount * meal.fibre_per_100g) / 100;
@@ -80,17 +78,33 @@ export default function IntakeGraph({ mealData }) {
             totalCarbs += meal.carbs_per_serving * mealAmount;
             totalFibre += meal.fibre_per_serving * mealAmount;
           }
-
         }
       }
     }
 
-    setProtein(totalProtein);
-    setCarbs(totalCarbs);
-    setFibre(totalFibre);
-    console.log("total protein: " + totalProtein);
-    console.log("total carbs: " + totalCarbs);
-    console.log("total fibre: " + totalFibre);
+    let columns = [
+      { title: "protein", value: totalProtein, color: "#ff0000", percentage: 0 },
+      { title: "carbs", value: totalCarbs, color: "#00ff00", percentage: 0 },
+      { title: "fibre", value: totalFibre, color: "#ffff00", percentage: 0 }
+    ]
+
+    let tempMaxRange = 0;
+    for (const column of columns) {
+      if (column.value > tempMaxRange)
+        tempMaxRange = column.value;
+    }
+
+    for (const column of columns) {
+      if (column.value != tempMaxRange) {
+        // console.log(column.value + " is " + (column.value / tempMaxRange) * 100 + " out of " + tempMaxRange);
+        column.percentage = parseInt((column.value / tempMaxRange) * 100);
+      } else {
+        column.percentage = 100;
+      }
+    }
+
+    setColumns(columns);
+    setMaxHeight(200);
   }
 
   useEffect(() => {
@@ -101,10 +115,7 @@ export default function IntakeGraph({ mealData }) {
 
   return (
     <VerticalBarGraph
-      columns={[
-        { title: "protein", value: protein, color: "#ff0000" },
-        { title: "carbs", value: carbs, color: "#00ff00" },
-        { title: "fibre", value: fibre, color: "#ffff00" }]}
-      maxRange="200" />
+      columns={columns}
+      maxHeight={maxHeight} />
   )
 }

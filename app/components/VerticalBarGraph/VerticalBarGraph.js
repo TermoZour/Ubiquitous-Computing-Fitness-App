@@ -2,11 +2,17 @@ import { StyleSheet } from "react-native"
 import { Surface } from "react-native-paper"
 import VerticalBar from "./VerticalBar"
 
-export default function VerticalBarGraph({ columns, maxRange }) {
+export default function VerticalBarGraph({ columns, maxHeight }) {
   return (
-    <Surface style={[styles.graphBackground, { height: parseInt(maxRange) }]}>
+    <Surface style={[styles.graphBackground, { height: parseInt(maxHeight) }]}>
       {columns.map((column, key) =>
-        <VerticalBar key={key} title={column["title"]} color={column["color"]} height={column["value"]} width="20" bottomText={column["value"] + "g"} />
+        <VerticalBar
+          key={key}
+          title={column.title}
+          color={column.color}
+          height={column.percentage}
+          width="20"
+          bottomText={column.value + "g"} />
       )}
     </Surface>
   )
