@@ -6,9 +6,9 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { WIZARD_STATUS, WIZARD_NAME, WIZARD_TRUE_STATE, DayEntry, MEAL_DB, mealDatabase } from '../../constants/StorageKeys';
 
-import VerticalBarGraph from '../../components/VerticalBarGraph/VerticalBarGraph';
 import MealsView from '../../components/MealsView/MealsView';
 import { MealEntry } from '../../constants/StorageKeys';
+import IntakeGraph from '../../components/VerticalBarGraph/IntakeGraph';
 
 export default function Dashboard({ navigation }) {
   const [isStartingUp, setIsStartingUp] = useState(true);
@@ -124,12 +124,10 @@ export default function Dashboard({ navigation }) {
             <Text variant="headlineLarge">Hello, {name}</Text>
 
             {/* <IntakeGraph mealData={mealData} /> */}
-            <VerticalBarGraph
-              columns={[
-                { title: "protein", value: 120, color: "#ff0000" },
-                { title: "carbs", value: 30, color: "#00ff00" },
-                { title: "fibre", value: 75, color: "#ffff00" }]}
-              maxRange="200" />
+            {isLoadingMealData ? <ActivityIndicator /> :
+              <IntakeGraph mealData={mealData} />
+            }
+
           </View>
 
           <View>
@@ -141,7 +139,7 @@ export default function Dashboard({ navigation }) {
             </View>
           </View>
 
-          {isLoadingMealData ? <></> : <MealsView mealData={mealData} year={date.getFullYear()} month={"" + (date.getMonth() + 1 <= 9 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1)} day={date.getDate()} navigation={navigation} />}
+          {isLoadingMealData ? <ActivityIndicator /> : <MealsView mealData={mealData} year={date.getFullYear()} month={"" + (date.getMonth() + 1 <= 9 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1)} day={date.getDate()} navigation={navigation} />}
         </ScrollView>
       }
     </GestureHandlerRootView >
