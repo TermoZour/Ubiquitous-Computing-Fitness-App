@@ -22,7 +22,6 @@ export default function ScanBarcode({ route, navigation }) {
     setScanned(true);
     // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
     navigation.replace("AddMeal", { mealType: mealType, mealData: mealData, year: year, month: month, day: day, barcodeId: data });
-    // TODO: Change header back arrow to perform same thing as this ^^
   };
 
   // set custom back button to restore normal back behaviour

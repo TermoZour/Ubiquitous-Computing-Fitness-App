@@ -3,13 +3,6 @@ import { View } from "react-native";
 import { Divider, Text } from "react-native-paper";
 
 export default function MealEntry({ meal, entry }) {
-  // useEffect(() => {
-  //   console.log("meal:");
-  //   console.log(meal);
-  //   console.log("entry:");
-  //   console.log(entry);
-  // }, [])
-
   if (meal != null)
     return (
       <View>

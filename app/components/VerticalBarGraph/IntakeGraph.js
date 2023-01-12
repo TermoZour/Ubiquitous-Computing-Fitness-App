@@ -5,9 +5,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function IntakeGraph({ mealData }) {
-  const [mealDb, setMealDb] = useState(null);
-  const [columns, setColumns] = useState([]);
-  const [maxHeight, setMaxHeight] = useState(0);
+  const [mealDb, setMealDb] = useState(null); // used to store meal database
+  const [columns, setColumns] = useState([]); // used to store the 3 columns of the graph - protein, carbs, fibre
+  const [maxHeight, setMaxHeight] = useState(0); // used to store max height of the Intake Graph box
 
   const getMealDb = async () => {
     try {
@@ -24,15 +24,13 @@ export default function IntakeGraph({ mealData }) {
     getMealDb();
   }, [])
 
+  // fetch meal from database given an ID (or barcode)
   const getMeal = async (mealId) => {
     try {
       const mealDatabase = JSON.parse(await AsyncStorage.getItem(MEAL_DB));
-      // console.log("fetched meal database");
-      // console.log(mealDatabase);
       const meal = mealDatabase.find(entry => entry.id == mealId);
+
       if (meal != null) {
-        // console.log("found meal for ID " + mealId);
-        // console.log(meal);
         return meal;
       } else {
         alert("Meal ID " + mealId + " not in database.");
@@ -45,19 +43,17 @@ export default function IntakeGraph({ mealData }) {
     }
   }
 
+  // calculate the 3 columns based on data gathered from user and meal database
   const computeMeals = async () => {
-    console.log("Graph meal data: ");
-    console.log(mealData);
-    let totalProtein = 0;
-    let totalCarbs = 0;
-    let totalFibre = 0;
+    let totalProtein = 0; // column 1
+    let totalCarbs = 0; // column 2
+    let totalFibre = 0; // column 3
 
-    for (const category in mealData) {
+    for (const category in mealData) { // for every meal category (breakfast, lunch, dinner, etc)
       const mealEntries = mealData[category];
 
       if (mealEntries != null) {
-        for (const mealEntry of mealEntries) {
-          console.log(mealEntry);
+        for (const mealEntry of mealEntries) { // for every meal in a category
           const mealId = mealEntry.id;
           const mealAmount = mealEntry.amount;
           const mealIsGrams = mealEntry.isGrams;
@@ -88,6 +84,7 @@ export default function IntakeGraph({ mealData }) {
       { title: "fibre", value: totalFibre, color: "#ffff00", percentage: 0 }
     ]
 
+    // calculate how big a column can be in percentage in relation to the biggest column
     let tempMaxRange = 0;
     for (const column of columns) {
       if (column.value > tempMaxRange)
@@ -104,7 +101,7 @@ export default function IntakeGraph({ mealData }) {
     }
 
     setColumns(columns);
-    setMaxHeight(200);
+    setMaxHeight(200); // set height of the graph view box
   }
 
   useEffect(() => {

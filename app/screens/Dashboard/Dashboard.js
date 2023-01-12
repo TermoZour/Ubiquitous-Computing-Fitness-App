@@ -10,14 +10,15 @@ import MealsView from '../../components/MealsView/MealsView';
 import IntakeGraph from '../../components/VerticalBarGraph/IntakeGraph';
 
 export default function Dashboard({ navigation }) {
-  const [isStartingUp, setIsStartingUp] = useState(true);
-  const [name, setName] = useState("");
+  const [isStartingUp, setIsStartingUp] = useState(true); // used to check for onboarding
+  const [name, setName] = useState(""); // user name from onboarding
   const [date, setDate] = useState(new Date());
-  const [mealData, setMealData] = useState();
-  const [isLoadingMealData, setIsLoadingMealData] = useState(true);
+  const [mealData, setMealData] = useState(); // meal data for a given day of the year
+  const [isLoadingMealData, setIsLoadingMealData] = useState(true); // used to check when meal data is loading from AsyncStorage to avoid null exceptions
 
-  const [headerStyle, setHeaderStyle] = useState(styles.mealsHeaderContainer);
+  const [headerStyle, setHeaderStyle] = useState(styles.mealsHeaderContainer); // used to switch date header style when stickied or not
 
+  // check if enrolment is completed
   const checkWizardStatus = async () => {
     try {
       const wizardState = await AsyncStorage.getItem(WIZARD_STATUS);
@@ -35,6 +36,7 @@ export default function Dashboard({ navigation }) {
     }
   }
 
+  // get user name from enrolment
   const getName = async () => {
     try {
       const name = await AsyncStorage.getItem(WIZARD_NAME);
@@ -61,8 +63,9 @@ export default function Dashboard({ navigation }) {
         setMealData(JSON.parse(data)[date.getDate() - 1]);
         setIsLoadingMealData(false);
 
-      } else {
+      } else { // we have no meal data for this year & month combo
         try {
+          // initialize empty data
           const emptyArr = new Array(31).fill(null);
           AsyncStorage.setItem("" + date.getFullYear() + month, JSON.stringify(emptyArr));
           setMealData(emptyArr);
@@ -88,9 +91,11 @@ export default function Dashboard({ navigation }) {
 
     getMealData();
 
+    // initialize meal products database
     AsyncStorage.setItem(MEAL_DB, JSON.stringify(mealDatabase));
   }, [date])
 
+  // change selected Dashboard date
   function increaseDate() {
     const nowDay = date.getDate();
     const newDate = new Date()
@@ -113,8 +118,8 @@ export default function Dashboard({ navigation }) {
     <GestureHandlerRootView style={{ flex: 1 }}>
       {isStartingUp ? <ActivityIndicator /> :
         <ScrollView
-          stickyHeaderIndices={[1]}
-          onScroll={event => {
+          stickyHeaderIndices={[1]} // select first child of ScrollView as sticky
+          onScroll={event => { // check when user scrolled at least 240px in order to detect when date header reached sticky position
             const y = event.nativeEvent.contentOffset.y;
             if (y >= 240) {
               setHeaderStyle(styles.mealsHeaderContainerSticky);
@@ -142,7 +147,9 @@ export default function Dashboard({ navigation }) {
             </View>
           </View>
 
-          {isLoadingMealData ? <ActivityIndicator /> : <MealsView mealData={mealData} year={date.getFullYear()} month={"" + (date.getMonth() + 1 <= 9 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1)} day={date.getDate()} navigation={navigation} />}
+          {isLoadingMealData ?
+            <ActivityIndicator /> :
+            <MealsView mealData={mealData} year={date.getFullYear()} month={"" + (date.getMonth() + 1 <= 9 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1)} day={date.getDate()} navigation={navigation} />}
         </ScrollView>
       }
     </GestureHandlerRootView >
@@ -152,7 +159,6 @@ export default function Dashboard({ navigation }) {
 const styles = StyleSheet.create({
   mealsHeaderContainer: {
     flexDirection: "row"
-    // backgroundColor: '#ffffff'
   },
   mealsHeaderContainerSticky: {
     flexDirection: "row",

@@ -27,27 +27,26 @@ export default function AddMeal({ route, navigation }) {
   const [amount, setAmount] = useState("");
 
   const addMealEntry = async () => {
-    const yearMonthEntry = year + month;
-    console.log("category: " + mealType);
-    console.log(yearMonthEntry);
+    const yearMonthEntry = year + month; // store the key used to access a month entry from user database (ex: "202301")
 
     try {
+      // get data for a given year&month combo
       let data = JSON.parse(await AsyncStorage.getItem(yearMonthEntry));
+
       if (data !== null) {
-        console.log("Entry found for: " + yearMonthEntry);
-        console.log(data);
+        // check if meals have been added for this day
+        if (data[day - 1] != null) {
+          let dayEntry = data[day - 1]; // get meals of today
 
-        if (data[day - 1] != null) { // other meals have been added for this day
-          let dayEntry = data[day - 1];
-          console.log(dayEntry);
-
-          if (dayEntry[mealType] != null) {
+          if (dayEntry[mealType] != null) { // check if mealType (ex: "breakfast") has any entries
             console.log("Found meals for " + mealType);
             console.log(dayEntry[mealType]);
           } else {
             console.log("No meal added for " + mealType);
             try {
+              // no meal data found, initializing entry now
               console.log("Setting meal data to AsyncStorage:");
+
               data[day - 1][mealType] = [{ "amount": amount, "id": mealId, "isGrams": isGrams }]
               console.log(JSON.stringify(data));
               await AsyncStorage.setItem(yearMonthEntry, JSON.stringify(data));
@@ -57,7 +56,8 @@ export default function AddMeal({ route, navigation }) {
               alert("Failed to store meal data");
             }
           }
-        } else { // no meals added for this day
+        } else {
+          // no meals added for this day
           data[day - 1] = { "breakfast": [], "morning_snack": [], "lunch": [], "afternoon_snack": [], "dinner": [] };
           data[day - 1][mealType] = [{ "amount": amount, "id": mealId, "isGrams": isGrams }];
 
@@ -69,9 +69,6 @@ export default function AddMeal({ route, navigation }) {
             alert("Failed to store first meal entry");
           }
         }
-        // console.log(`Today's day is: ${date.getDate()}`);
-        // setMealData(JSON.parse(data)[date.getDate() - 1]);
-        // setIsLoadingMealData(false);
       }
     } catch (e) {
       console.error(e);
@@ -122,12 +119,12 @@ export default function AddMeal({ route, navigation }) {
     console.log(barcodeId);
 
     if (barcodeId != null) { // activity was started after a barcode was successfully scanned
-      // search for barcode in database
-      const meal = getMeal(barcodeId);
+      // search for barcode in database and autocomplete if found
+      getMeal(barcodeId);
     }
   })
 
-  // set custom back button to restore normal back behaviour
+  // set custom back button to restore normal back behaviour, because navigation.replace() was used in order to force previous screen to refresh
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
@@ -145,6 +142,7 @@ export default function AddMeal({ route, navigation }) {
         <Text variant="headlineMedium" style={{ marginStart: 5 }}>{mealType.charAt(0).toUpperCase() + mealType.slice(1).replace("_", " ")}</Text>
         <Text>{year}-{month}-{day}</Text>
 
+        {/* Main information */}
         <Card style={{ margin: 5 }}>
           <Card.Title titleVariant="titleMedium" style={{ marginBottom: -15 }} title="Main information" />
 
@@ -213,6 +211,7 @@ export default function AddMeal({ route, navigation }) {
           </Card.Content>
         </Card>
 
+        {/* Contents per 100g */}
         <Card style={{ margin: 5 }}>
           <Card.Title titleVariant="titleMedium" style={{ marginBottom: -15 }} title="Contents per 100g" />
 
@@ -252,6 +251,7 @@ export default function AddMeal({ route, navigation }) {
           </Card.Content>
         </Card>
 
+        {/* Contents per serving */}
         <Card style={{ margin: 5 }}>
           <Card.Title titleVariant="titleMedium" style={{ marginBottom: -15 }} title="Contents per serving" />
 
@@ -291,6 +291,7 @@ export default function AddMeal({ route, navigation }) {
           </Card.Content>
         </Card>
       </ScrollView>
+
       <FAB
         icon="plus"
         style={styles.fab}

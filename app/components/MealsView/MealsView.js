@@ -7,12 +7,12 @@ import { MEAL_DB } from "../../constants/StorageKeys";
 import MealEntry from "./MealEntry";
 
 export default function MealsView({ mealData, year, month, day, navigation }) {
-  const [breakfast, setBreakfast] = useState([]);
-  const [morningSnack, setMorningSnack] = useState([]);
-  const [lunch, setLunch] = useState([]);
-  const [afternoonSnack, setAfternoonSnack] = useState([]);
-  const [dinner, setDinner] = useState([]);
-  const [mealDatabase, setMealDatabase] = useState(null);
+  const [breakfast, setBreakfast] = useState([]); // used to store breakfast meals
+  const [morningSnack, setMorningSnack] = useState([]); // used to store morning snacks
+  const [lunch, setLunch] = useState([]); // used to store lunch meals
+  const [afternoonSnack, setAfternoonSnack] = useState([]); // used to store afternoon snacks
+  const [dinner, setDinner] = useState([]); // used to store dinner meals
+  const [mealDatabase, setMealDatabase] = useState(null); // used to store meals database
 
   const fetchMealDatabase = async () => {
     try {
@@ -26,6 +26,7 @@ export default function MealsView({ mealData, year, month, day, navigation }) {
     }
   }
 
+  // initialize meals database
   useEffect(() => {
     fetchMealDatabase();
   }, [])
@@ -71,11 +72,6 @@ export default function MealsView({ mealData, year, month, day, navigation }) {
     }
   }, [mealDatabase])
 
-  /*
-  make add meal button create a modal (or new activity) which can take manual data of meal based on class input
-  or a scan button function which will scan for the tag that will automatically fill in the data from database
-  meal data will be stored based on month of year.
-  */
 
   return (
     <View style={{ flex: 1 }}>
@@ -130,8 +126,6 @@ export default function MealsView({ mealData, year, month, day, navigation }) {
 
 const styles = StyleSheet.create({
   mealCard: {
-    // margin: 10
-    // marginTop: 10,
     marginBottom: 10,
     marginStart: 10,
     marginEnd: 10

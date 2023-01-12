@@ -10,7 +10,7 @@ export default function VerticalBarGraph({ columns, maxHeight }) {
           key={key}
           title={column.title}
           color={column.color}
-          height={column.percentage}
+          height={column.percentage} // use percentage instead of literal value to prevent out of bounds rendering
           width="20"
           bottomText={column.value + "g"} />
       ) : <Text style={{ alignSelf: "center" }}>Add a meal to begin.</Text>}

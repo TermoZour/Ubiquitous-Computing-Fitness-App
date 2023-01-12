@@ -22,13 +22,21 @@ export default function App() {
           />
           <Stack.Screen
             name="AddMeal"
-            options={{ title: "Add meal" }}
+            options={{ title: "Add meal" }} // set custom screen title
           >
             {
               (props) => <AddMeal {...props} />
             }
           </Stack.Screen>
-          <Stack.Screen name="ScanBarcode" component={ScanBarcode} />
+          <Stack.Screen
+            name="ScanBarcode"
+            options={{ title: "Scan barcode" }} // set custom screen title
+          >
+            {
+              (props) => <ScanBarcode {...props} />
+            }
+          </Stack.Screen>
+
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>
