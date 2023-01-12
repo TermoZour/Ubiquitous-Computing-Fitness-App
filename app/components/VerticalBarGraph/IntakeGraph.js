@@ -108,7 +108,7 @@ export default function IntakeGraph({ mealData }) {
     if (mealDb != null) {
       computeMeals();
     }
-  }, [mealDb])
+  }, [mealDb, mealData])
 
   return (
     <VerticalBarGraph
