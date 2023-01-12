@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
   },
   mealsHeaderContainerSticky: {
     flexDirection: "row",
-    backgroundColor: '#ffffff',
+    backgroundColor: '#cccccc',
     elevation: 4
   },
   mealsHeaderText: {
