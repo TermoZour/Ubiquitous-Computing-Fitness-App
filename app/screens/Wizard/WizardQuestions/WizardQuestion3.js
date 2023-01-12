@@ -22,7 +22,7 @@ export default function WizardQuestion3({ navigation }) {
         style={styles.fab}
         onPress={() => {
           setWizardStatus(WIZARD_TRUE_STATE);
-          navigation.goBack()
+          navigation.replace("Dashboard");
         }} />
     </View>
   )

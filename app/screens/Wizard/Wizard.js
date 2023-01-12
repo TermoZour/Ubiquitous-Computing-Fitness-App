@@ -12,7 +12,6 @@ export default function Wizard({ navigation }) {
       <Stack.Screen name="WizardQuestion1" component={WizardQuestion1} />
       <Stack.Screen name="WizardQuestion2" component={WizardQuestion2} />
       <Stack.Screen name="WizardQuestion3" component={WizardQuestion3} />
-      {/* <Stack.Screen name="ScanBarcode" component={ScanBarcode} /> */}
     </Stack.Navigator>
   )
 }

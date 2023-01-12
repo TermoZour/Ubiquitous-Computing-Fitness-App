@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import { Text, Button, IconButton } from 'react-native-paper';
+import { Text, IconButton, ActivityIndicator } from 'react-native-paper';
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,18 +11,22 @@ import MealsView from '../../components/MealsView/MealsView';
 import { MealEntry } from '../../constants/StorageKeys';
 
 export default function Dashboard({ navigation }) {
-  const [wizardDone, setWizardDone] = useState(true);
-  const [name, setName] = useState("Human");
+  const [isStartingUp, setIsStartingUp] = useState(true);
+  const [name, setName] = useState("");
   const [date, setDate] = useState(new Date());
   const [mealData, setMealData] = useState();
   const [isLoadingMealData, setIsLoadingMealData] = useState(true);
 
-  const checkWizardStatus = () => {
+  const checkWizardStatus = async () => {
     try {
-      const wizardState = AsyncStorage.getItem(WIZARD_STATUS);
+      const wizardState = await AsyncStorage.getItem(WIZARD_STATUS);
       if (wizardState == WIZARD_TRUE_STATE) {
-        console.log(wizardState);
-        setWizardDone(true);
+        console.log("Wizard done");
+        setIsStartingUp(false);
+      } else {
+        setIsStartingUp(true);
+        console.log("wizard state not set");
+        navigation.replace("Wizard");
       }
     } catch (e) {
       console.error(e);
@@ -68,10 +72,7 @@ export default function Dashboard({ navigation }) {
 
   useEffect(() => {
     checkWizardStatus();
-    if (!wizardDone) {// TODO: Fix wizard error. Somehow the state is not set to true before this check.
-      console.log("Setup wizard not done.")
-      navigation.navigate("Wizard")
-    }
+
     getName();
 
     console.log(`Today's date: ${date}`);
@@ -79,7 +80,7 @@ export default function Dashboard({ navigation }) {
     getMealData();
 
     const dayEntry = new DayEntry([new MealEntry(0, 4, false)], null, [new MealEntry(0, 4, false)], null, null);
-    AsyncStorage.setItem("202301", JSON.stringify([null, null, null, null, null, null, null, null, null, null, dayEntry]));
+    AsyncStorage.setItem("202301", JSON.stringify([null, null, null, null, null, null, null, null, null, null, null, dayEntry]));
     AsyncStorage.setItem(MEAL_DB, JSON.stringify(mealDatabase));
     // AsyncStorage.removeItem("202301");
   }, [date])
@@ -104,31 +105,32 @@ export default function Dashboard({ navigation }) {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <ScrollView
-      // stickyHeaderIndices={[1]}  // the header gets weird UI when this is set
-      >
-        <View style={{ marginStart: 10, marginEnd: 10 }}>
-          <Text variant="headlineLarge">Hello, {name}</Text>
+      {isStartingUp ? <ActivityIndicator /> :
+        <ScrollView
+        // stickyHeaderIndices={[1]}  // the header gets weird UI when this is set
+        >
+          <View style={{ marginStart: 10, marginEnd: 10 }}>
+            <Text variant="headlineLarge">Hello, {name}</Text>
 
-          {/* <IntakeGraph mealData={mealData} /> */}
-          <VerticalBarGraph
-            columns={[
-              { title: "protein", value: 120, color: "#ff0000" },
-              { title: "carbs", value: 30, color: "#00ff00" },
-              { title: "fibre", value: 75, color: "#0000ff" }]}
-            maxRange="200" />
-        </View>
+            {/* <IntakeGraph mealData={mealData} /> */}
+            <VerticalBarGraph
+              columns={[
+                { title: "protein", value: 120, color: "#ff0000" },
+                { title: "carbs", value: 30, color: "#00ff00" },
+                { title: "fibre", value: 75, color: "#0000ff" }]}
+              maxRange="200" />
+          </View>
 
-        <View style={styles.mealsHeaderContainer}>
-          <IconButton icon="arrow-left" onPress={() => decreaseDate()} />
-          <Text style={styles.mealsHeaderText} variant="headlineSmall">Meals of </Text>
-          <Text style={styles.mealsHeaderText} variant="headlineSmall">{date.getDate()}/{date.getMonth() + 1}/{date.getFullYear()}</Text>
-          <IconButton icon="arrow-right" onPress={() => increaseDate()} />
-        </View>
+          <View style={styles.mealsHeaderContainer}>
+            <IconButton icon="arrow-left" onPress={() => decreaseDate()} />
+            <Text style={styles.mealsHeaderText} variant="headlineSmall">Meals of </Text>
+            <Text style={styles.mealsHeaderText} variant="headlineSmall">{date.getDate()}/{date.getMonth() + 1}/{date.getFullYear()}</Text>
+            <IconButton icon="arrow-right" onPress={() => increaseDate()} />
+          </View>
 
-        {isLoadingMealData ? <></> : <MealsView mealData={mealData} navigation={navigation} />}
-      </ScrollView>
-
+          {isLoadingMealData ? <></> : <MealsView mealData={mealData} navigation={navigation} />}
+        </ScrollView>
+      }
     </GestureHandlerRootView>
   )
 }
