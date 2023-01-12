@@ -1,11 +1,11 @@
 import { StyleSheet } from "react-native"
-import { Surface } from "react-native-paper"
+import { Surface, Text } from "react-native-paper"
 import VerticalBar from "./VerticalBar"
 
 export default function VerticalBarGraph({ columns, maxHeight }) {
   return (
     <Surface style={[styles.graphBackground, { height: parseInt(maxHeight) }]}>
-      {columns.map((column, key) =>
+      {columns.every(((element) => element.value != 0)) ? columns.map((column, key) =>
         <VerticalBar
           key={key}
           title={column.title}
@@ -13,7 +13,7 @@ export default function VerticalBarGraph({ columns, maxHeight }) {
           height={column.percentage}
           width="20"
           bottomText={column.value + "g"} />
-      )}
+      ) : <Text style={{ alignSelf: "center" }}>Add a meal to begin.</Text>}
     </Surface>
   )
 }
