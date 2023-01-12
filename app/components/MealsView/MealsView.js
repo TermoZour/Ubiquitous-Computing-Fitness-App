@@ -85,7 +85,7 @@ export default function MealsView({ mealData, year, month, day, navigation }) {
           {mealData != null && breakfast.length > 0 ? breakfast.map((data, index) => <MealEntry key={index} meal={data.meal} entry={data.entry} />) : <Text>No meal recorded.</Text>}
         </Card.Content>
         <Card.Actions>
-          <Button onPress={() => navigation.replace("AddMeal", { mealType: "breakfast", mealData: mealData.breakfast, year: year, month: month, day: day })}>Add meal</Button>
+          <Button onPress={() => navigation.replace("AddMeal", { mealType: "breakfast", year: year, month: month, day: day })}>Add meal</Button>
         </Card.Actions>
       </Card>
       <Card style={styles.mealCard} mode="contained">
@@ -94,7 +94,7 @@ export default function MealsView({ mealData, year, month, day, navigation }) {
           {mealData != null && morningSnack.length > 0 ? morningSnack.map((data, index) => <MealEntry key={index} meal={data.meal} entry={data.entry} />) : <Text>No meal recorded.</Text>}
         </Card.Content>
         <Card.Actions>
-          <Button onPress={() => navigation.replace("AddMeal", { mealType: "morning_snack", mealData: mealData.morning_snack, year: year, month: month, day: day })}>Add meal</Button>
+          <Button onPress={() => navigation.replace("AddMeal", { mealType: "morning_snack", year: year, month: month, day: day })}>Add meal</Button>
         </Card.Actions>
       </Card>
       <Card style={styles.mealCard}>
@@ -103,7 +103,7 @@ export default function MealsView({ mealData, year, month, day, navigation }) {
           {mealData != null && lunch.length > 0 ? lunch.map((data, index) => <MealEntry key={index} meal={data.meal} entry={data.entry} />) : <Text>No meal recorded.</Text>}
         </Card.Content>
         <Card.Actions>
-          <Button onPress={() => navigation.replace("AddMeal", { mealType: "lunch", mealData: mealData.lunch, year: year, month: month, day: day })}>Add meal</Button>
+          <Button onPress={() => navigation.replace("AddMeal", { mealType: "lunch", year: year, month: month, day: day })}>Add meal</Button>
         </Card.Actions>
       </Card>
       <Card style={styles.mealCard} mode="contained">
@@ -112,7 +112,7 @@ export default function MealsView({ mealData, year, month, day, navigation }) {
           {mealData != null && afternoonSnack.length > 0 ? afternoonSnack.map((data, index) => <MealEntry key={index} meal={data.meal} entry={data.entry} />) : <Text>No meal recorded.</Text>}
         </Card.Content>
         <Card.Actions>
-          <Button onPress={() => navigation.replace("AddMeal", { mealType: "afternoon_snack", mealData: mealData.afternoon_snack, year: year, month: month, day: day })}>Add meal</Button>
+          <Button onPress={() => navigation.replace("AddMeal", { mealType: "afternoon_snack", year: year, month: month, day: day })}>Add meal</Button>
         </Card.Actions>
       </Card>
       <Card style={styles.mealCard}>
@@ -121,7 +121,7 @@ export default function MealsView({ mealData, year, month, day, navigation }) {
           {mealData != null && dinner.length > 0 ? dinner.map((data, index) => <MealEntry key={index} meal={data.meal} entry={data.entry} />) : <Text>No meal recorded.</Text>}
         </Card.Content>
         <Card.Actions>
-          <Button onPress={() => navigation.replace("AddMeal", { mealType: "dinner", mealData: mealData.dinner, year: year, month: month, day: day })}>Add meal</Button>
+          <Button onPress={() => navigation.replace("AddMeal", { mealType: "dinner", year: year, month: month, day: day })}>Add meal</Button>
         </Card.Actions>
       </Card>
     </View>

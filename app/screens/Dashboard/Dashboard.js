@@ -4,10 +4,9 @@ import { Text, IconButton, ActivityIndicator } from 'react-native-paper';
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { WIZARD_STATUS, WIZARD_NAME, WIZARD_TRUE_STATE, DayEntry, MEAL_DB, mealDatabase } from '../../constants/StorageKeys';
+import { WIZARD_STATUS, WIZARD_NAME, WIZARD_TRUE_STATE, MEAL_DB, mealDatabase } from '../../constants/StorageKeys';
 
 import MealsView from '../../components/MealsView/MealsView';
-import { MealEntry } from '../../constants/StorageKeys';
 import IntakeGraph from '../../components/VerticalBarGraph/IntakeGraph';
 
 export default function Dashboard({ navigation }) {
@@ -59,15 +58,15 @@ export default function Dashboard({ navigation }) {
       console.log(`Fetching data from ${date.getFullYear()}${month}`);
       const data = await AsyncStorage.getItem("" + date.getFullYear() + month);
       if (data !== null) {
-        // console.log("Meal data from Dashboard: ");
-        // console.log(data);
-        // console.log(`Today's day is: ${date.getDate()}`);
         setMealData(JSON.parse(data)[date.getDate() - 1]);
         setIsLoadingMealData(false);
+
       } else {
         try {
-          AsyncStorage.setItem("" + date.getFullYear() + month, JSON.stringify([]));
-          setMealData([]);
+          const emptyArr = new Array(31).fill(null);
+          AsyncStorage.setItem("" + date.getFullYear() + month, JSON.stringify(emptyArr));
+          setMealData(emptyArr);
+
         } catch (e) {
           console.error(e);
           alert("Failed to set empty meal data");
@@ -89,11 +88,8 @@ export default function Dashboard({ navigation }) {
 
     getMealData();
 
-    // const dayEntry = new DayEntry([new MealEntry("5054781302810", 4, false)], null, [new MealEntry("5054781302810", 4, false)], null, null);
-    // AsyncStorage.setItem("202301", JSON.stringify([null, null, null, null, null, null, null, null, null, null, null, dayEntry]));
     AsyncStorage.setItem(MEAL_DB, JSON.stringify(mealDatabase));
-    // AsyncStorage.removeItem("202301");
-  }, [date, mealData])
+  }, [date])
 
   function increaseDate() {
     const nowDay = date.getDate();

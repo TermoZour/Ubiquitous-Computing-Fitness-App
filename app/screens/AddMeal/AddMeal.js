@@ -5,7 +5,7 @@ import { Text, FAB, TextInput, Card, IconButton, SegmentedButtons } from "react-
 import { MEAL_DB } from "../../constants/StorageKeys";
 
 export default function AddMeal({ route, navigation }) {
-  const { mealType, mealData, year, month, day } = route.params
+  const { mealType, year, month, day } = route.params
 
   const [mealName, setMealName] = useState("");
   const [mealTotalGrams, setMealTotalGrams] = useState("");
@@ -31,17 +31,13 @@ export default function AddMeal({ route, navigation }) {
     console.log("category: " + mealType);
     console.log(yearMonthEntry);
 
-    // if yes, add meal entry to list
-    // if not, create list with meal entry
-    // AsyncStorage.setItem("202301", JSON.stringify([null, null, null, null, null, null, null, null, null, null, null, dayEntry]));
-
     try {
       let data = JSON.parse(await AsyncStorage.getItem(yearMonthEntry));
       if (data !== null) {
         console.log("Entry found for: " + yearMonthEntry);
         console.log(data);
 
-        if (data[day - 1] != null) {
+        if (data[day - 1] != null) { // other meals have been added for this day
           let dayEntry = data[day - 1];
           console.log(dayEntry);
 
@@ -55,10 +51,22 @@ export default function AddMeal({ route, navigation }) {
               data[day - 1][mealType] = [{ "amount": amount, "id": mealId, "isGrams": isGrams }]
               console.log(JSON.stringify(data));
               await AsyncStorage.setItem(yearMonthEntry, JSON.stringify(data));
+              navigation.replace("Dashboard");
             } catch (e) {
               console.error(e);
               alert("Failed to store meal data");
             }
+          }
+        } else { // no meals added for this day
+          data[day - 1] = { "breakfast": [], "morning_snack": [], "lunch": [], "afternoon_snack": [], "dinner": [] };
+          data[day - 1][mealType] = [{ "amount": amount, "id": mealId, "isGrams": isGrams }];
+
+          try {
+            await AsyncStorage.setItem(yearMonthEntry, JSON.stringify(data))
+            navigation.replace("Dashboard");
+          } catch (e) {
+            console.error(e);
+            alert("Failed to store first meal entry");
           }
         }
         // console.log(`Today's day is: ${date.getDate()}`);
@@ -74,12 +82,11 @@ export default function AddMeal({ route, navigation }) {
   async function getMeal(barcodeId) {
     try {
       const mealDatabase = JSON.parse(await AsyncStorage.getItem(MEAL_DB));
-      console.log("fetched meal database");
-      console.log(mealDatabase);
       const meal = mealDatabase.find(entry => entry.id == barcodeId);
+
       if (meal != null) {
         console.log("found meal for ID " + barcodeId);
-        console.log(meal);
+        console.log(meal.name);
 
         // autocomplete meal data
         setMealName(meal.name);
