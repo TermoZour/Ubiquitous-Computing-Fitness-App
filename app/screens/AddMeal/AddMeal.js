@@ -41,6 +41,14 @@ export default function AddMeal({ route, navigation }) {
           if (dayEntry[mealType] != null) { // check if mealType (ex: "breakfast") has any entries
             console.log("Found meals for " + mealType);
             console.log(dayEntry[mealType]);
+            dayEntry[mealType].push({ "amount": amount, "id": mealId, "isGrams": isGrams });
+            try {
+              await AsyncStorage.setItem(yearMonthEntry, JSON.stringify(data));
+              navigation.replace("Dashboard");
+            } catch (e) {
+              console.error(e);
+              alert("Failed to store meal data");
+            }
           } else {
             console.log("No meal added for " + mealType);
             try {
@@ -140,7 +148,6 @@ export default function AddMeal({ route, navigation }) {
     <View>
       <ScrollView>
         <Text variant="headlineMedium" style={{ marginStart: 5 }}>{mealType.charAt(0).toUpperCase() + mealType.slice(1).replace("_", " ")}</Text>
-        <Text>{year}-{month}-{day}</Text>
 
         {/* Main information */}
         <Card style={{ margin: 5 }}>
