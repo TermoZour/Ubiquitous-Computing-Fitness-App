@@ -64,6 +64,14 @@ export default function Dashboard({ navigation }) {
         // console.log(`Today's day is: ${date.getDate()}`);
         setMealData(JSON.parse(data)[date.getDate() - 1]);
         setIsLoadingMealData(false);
+      } else {
+        try {
+          AsyncStorage.setItem("" + date.getFullYear() + month, JSON.stringify([]));
+          setMealData([]);
+        } catch (e) {
+          console.error(e);
+          alert("Failed to set empty meal data");
+        }
       }
     } catch (e) {
       console.error(e);
@@ -85,7 +93,7 @@ export default function Dashboard({ navigation }) {
     // AsyncStorage.setItem("202301", JSON.stringify([null, null, null, null, null, null, null, null, null, null, null, dayEntry]));
     AsyncStorage.setItem(MEAL_DB, JSON.stringify(mealDatabase));
     // AsyncStorage.removeItem("202301");
-  }, [date])
+  }, [date, mealData])
 
   function increaseDate() {
     const nowDay = date.getDate();
@@ -123,7 +131,6 @@ export default function Dashboard({ navigation }) {
           <View style={{ marginStart: 10, marginEnd: 10 }}>
             <Text variant="headlineLarge">Hello, {name}</Text>
 
-            {/* <IntakeGraph mealData={mealData} /> */}
             {isLoadingMealData ? <ActivityIndicator /> :
               <IntakeGraph mealData={mealData} />
             }
