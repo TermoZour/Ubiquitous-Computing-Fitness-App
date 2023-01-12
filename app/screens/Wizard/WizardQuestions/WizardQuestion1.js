@@ -27,7 +27,7 @@ export default function WizardQuestion1({ navigation }) {
       />
 
       <FAB
-        icon="plus"
+        icon="arrow-right"
         style={styles.fab}
         onPress={() => {
           saveName();

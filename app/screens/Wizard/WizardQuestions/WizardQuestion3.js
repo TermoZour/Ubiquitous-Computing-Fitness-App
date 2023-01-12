@@ -1,13 +1,16 @@
-import { StyleSheet, View } from "react-native";
-import { FAB, Text } from "react-native-paper";
+import { useState } from "react";
+import { View, StyleSheet } from "react-native"
+import { FAB, TextInput, Text } from "react-native-paper"
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { WIZARD_STATUS, WIZARD_TRUE_STATE } from "../../../constants/StorageKeys";
+import { WIZARD_WEIGHT } from "../../../constants/StorageKeys";
 
-export default function WizardQuestion3({ navigation }) {
-  const setWizardStatus = async (state) => {
+export default function WizardQuestion1({ navigation }) {
+  const [weight, setWeight] = useState("");
+
+  const saveWeight = async () => {
     try {
-      await AsyncStorage.setItem(WIZARD_STATUS, state);
+      await AsyncStorage.setItem(WIZARD_WEIGHT, weight)
     } catch (e) {
       console.error(e);
       alert('Failed to save the data to the storage');
@@ -16,14 +19,22 @@ export default function WizardQuestion3({ navigation }) {
 
   return (
     <View style={{ flex: 1 }}>
-      <Text>That's it! Now we can begin.</Text>
+      <Text>What is your weight?</Text>
+      <TextInput
+        label="Weight (kg)"
+        value={weight}
+        onChangeText={text => setWeight(text)}
+        keyboardType="number-pad"
+      />
+
       <FAB
-        icon="plus"
+        icon="arrow-right"
         style={styles.fab}
         onPress={() => {
-          setWizardStatus(WIZARD_TRUE_STATE);
-          navigation.replace("Dashboard");
-        }} />
+          saveWeight();
+          navigation.replace("WizardQuestion4");
+        }}
+      />
     </View>
   )
 }

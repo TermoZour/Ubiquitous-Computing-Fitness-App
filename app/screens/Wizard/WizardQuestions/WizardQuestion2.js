@@ -49,7 +49,7 @@ export default function WizardQuestion2({ navigation }) {
         </View>
       </TouchableRipple>
       <FAB
-        icon="plus"
+        icon="arrow-right"
         style={styles.fab}
         onPress={() => {
           saveProgram();
