@@ -27,10 +27,10 @@ export class DayEntry {
 
 export const mealDatabase = [
   {
-    "id": 0,
+    "id": "5054781302810",
     "name": "Mozarella Sticks",
     "grams": 240,
-    "energy_per_100g": 150,
+    "energy_per_100g": 324,
     "carbs_per_100g": 25,
     "fibre_per_100g": 1.8,
     "protein_per_100g": 11,
@@ -41,7 +41,7 @@ export const mealDatabase = [
     "protein_per_serving": 2.1
   },
   {
-    "id": 1,
+    "id": "1",
     "name": "Breaded Chicken",
     "grams": 100,
     "energy_per_100g": 50

@@ -1,9 +1,10 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import { Button, StyleSheet, View } from 'react-native';
-import {BarCodeScanner} from "expo-barcode-scanner";
+import { BarCodeScanner } from "expo-barcode-scanner";
 
 
-export default function ScanBarcode() {
+export default function ScanBarcode({ route, navigation }) {
+  const { mealType, mealData, year, month, day } = route.params // remember params from AddMeal so they can be added back
   // const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
 
@@ -18,13 +19,16 @@ export default function ScanBarcode() {
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    navigation.replace("AddMeal", { mealType: mealType, mealData: mealData, year: year, month: month, day: day, barcodeId: data });
+    // TODO: Change header back arrow to perform same thing as this ^^
   };
 
   return (
     <View style={styles.container}>
       <BarCodeScanner
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+        barCodeTypes={["32"]}
         style={StyleSheet.absoluteFillObject}
       />
       {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}

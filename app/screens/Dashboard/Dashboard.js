@@ -81,8 +81,8 @@ export default function Dashboard({ navigation }) {
 
     getMealData();
 
-    const dayEntry = new DayEntry([new MealEntry(0, 4, false)], null, [new MealEntry(0, 4, false)], null, null);
-    AsyncStorage.setItem("202301", JSON.stringify([null, null, null, null, null, null, null, null, null, null, null, dayEntry]));
+    // const dayEntry = new DayEntry([new MealEntry("5054781302810", 4, false)], null, [new MealEntry("5054781302810", 4, false)], null, null);
+    // AsyncStorage.setItem("202301", JSON.stringify([null, null, null, null, null, null, null, null, null, null, null, dayEntry]));
     AsyncStorage.setItem(MEAL_DB, JSON.stringify(mealDatabase));
     // AsyncStorage.removeItem("202301");
   }, [date])
@@ -141,7 +141,7 @@ export default function Dashboard({ navigation }) {
             </View>
           </View>
 
-          {isLoadingMealData ? <></> : <MealsView mealData={mealData} navigation={navigation} />}
+          {isLoadingMealData ? <></> : <MealsView mealData={mealData} year={date.getFullYear()} month={"" + (date.getMonth() + 1 <= 9 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1)} day={date.getDate()} navigation={navigation} />}
         </ScrollView>
       }
     </GestureHandlerRootView >
