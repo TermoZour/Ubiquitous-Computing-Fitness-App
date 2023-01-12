@@ -82,7 +82,7 @@ export default function MealsView({ mealData, navigation }) {
       <Card style={styles.mealCard}>
         <Card.Content>
           <Title>Breakfast</Title>
-          {mealData != null && breakfast.length > 0 ? breakfast.map(data => <MealEntry meal={data.meal} entry={data.entry} />) : <Text>No meal recorded.</Text>}
+          {mealData != null && breakfast.length > 0 ? breakfast.map((data, index) => <MealEntry key={index} meal={data.meal} entry={data.entry} />) : <Text>No meal recorded.</Text>}
         </Card.Content>
         <Card.Actions>
           <Button onPress={() => navigation.navigate("AddMeal", { mealType: "breakfast", mealData: mealData.breakfast })}>Add meal</Button>
@@ -91,7 +91,7 @@ export default function MealsView({ mealData, navigation }) {
       <Card style={styles.mealCard} mode="contained">
         <Card.Content>
           <Title>Morning Snack</Title>
-          {mealData != null && morningSnack.length > 0 ? morningSnack.map(data => <MealEntry meal={data.meal} entry={data.entry} />) : <Text>No meal recorded.</Text>}
+          {mealData != null && morningSnack.length > 0 ? morningSnack.map((data, index) => <MealEntry key={index} meal={data.meal} entry={data.entry} />) : <Text>No meal recorded.</Text>}
         </Card.Content>
         <Card.Actions>
           <Button onPress={() => navigation.navigate("AddMeal", { mealType: "morning_snack", mealData: mealData.morning_snack })}>Add meal</Button>
@@ -100,7 +100,7 @@ export default function MealsView({ mealData, navigation }) {
       <Card style={styles.mealCard}>
         <Card.Content>
           <Title>Lunch</Title>
-          {mealData != null && lunch.length > 0 ? lunch.map(data => <MealEntry meal={data.meal} entry={data.entry} />) : <Text>No meal recorded.</Text>}
+          {mealData != null && lunch.length > 0 ? lunch.map((data, index) => <MealEntry key={index} meal={data.meal} entry={data.entry} />) : <Text>No meal recorded.</Text>}
         </Card.Content>
         <Card.Actions>
           <Button onPress={() => navigation.navigate("AddMeal", { mealType: "lunch", mealData: mealData.lunch })}>Add meal</Button>
@@ -109,7 +109,7 @@ export default function MealsView({ mealData, navigation }) {
       <Card style={styles.mealCard} mode="contained">
         <Card.Content>
           <Title>Afternoon Snack</Title>
-          {mealData != null && afternoonSnack.length > 0 ? afternoonSnack.map(data => <MealEntry meal={data.meal} entry={data.entry} />) : <Text>No meal recorded.</Text>}
+          {mealData != null && afternoonSnack.length > 0 ? afternoonSnack.map((data, index) => <MealEntry key={index} meal={data.meal} entry={data.entry} />) : <Text>No meal recorded.</Text>}
         </Card.Content>
         <Card.Actions>
           <Button>Add meal</Button>
