@@ -1,5 +1,6 @@
 export const WIZARD_STATUS = '@wizardDone';
 export const WIZARD_NAME = '@WizardName';
+export const WIZARD_WEIGHT = '@WizardWeight';
 export const WIZARD_PROGRAM = '@WizardProgram';
 export const WIZARD_TRUE_STATE = 'true';
 export const WIZARD_MAINTAIN = '0';

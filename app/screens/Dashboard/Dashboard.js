@@ -4,14 +4,19 @@ import { Text, IconButton, ActivityIndicator } from 'react-native-paper';
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { WIZARD_STATUS, WIZARD_NAME, WIZARD_TRUE_STATE, MEAL_DB, mealDatabase } from '../../constants/StorageKeys';
+import { WIZARD_STATUS, WIZARD_NAME, WIZARD_TRUE_STATE, MEAL_DB, mealDatabase, WIZARD_PROGRAM, WIZARD_WEIGHT } from '../../constants/StorageKeys';
 
 import MealsView from '../../components/MealsView/MealsView';
 import IntakeGraph from '../../components/VerticalBarGraph/IntakeGraph';
+import Targets from '../../components/Targets/Targets';
 
 export default function Dashboard({ navigation }) {
   const [isStartingUp, setIsStartingUp] = useState(true); // used to check for onboarding
-  const [name, setName] = useState(""); // user name from onboarding
+
+  const [userName, setUserName] = useState(""); // user name from onboarding
+  const [userProgram, setUserProgram] = useState(""); // user program from onboarding
+  const [userWeight, setUserWeight] = useState(""); // user weight from onboarding
+
   const [date, setDate] = useState(new Date());
   const [mealData, setMealData] = useState(); // meal data for a given day of the year
   const [isLoadingMealData, setIsLoadingMealData] = useState(true); // used to check when meal data is loading from AsyncStorage to avoid null exceptions
@@ -37,15 +42,26 @@ export default function Dashboard({ navigation }) {
   }
 
   // get user name from enrolment
-  const getName = async () => {
+  const getUser = async () => {
     try {
-      const name = await AsyncStorage.getItem(WIZARD_NAME);
-      if (name !== null) {
-        setName(name);
+      const userName = await AsyncStorage.getItem(WIZARD_NAME);
+      const userProgram = await AsyncStorage.getItem(WIZARD_PROGRAM);
+      const userWeight = await AsyncStorage.getItem(WIZARD_WEIGHT);
+
+      if (userName !== null) {
+        setUserName(userName);
+      }
+
+      if (userProgram !== null) {
+        setUserProgram(userProgram);
+      }
+
+      if (userWeight !== null) {
+        setUserWeight(userWeight);
       }
     } catch (e) {
       console.error(e);
-      alert("Failed to fetch name");
+      alert("Failed to fetch user data");
     }
   }
 
@@ -85,7 +101,7 @@ export default function Dashboard({ navigation }) {
   useEffect(() => {
     checkWizardStatus();
 
-    getName();
+    getUser();
 
     console.log(`Today's date: ${date}`);
 
@@ -93,6 +109,7 @@ export default function Dashboard({ navigation }) {
 
     // initialize meal products database
     AsyncStorage.setItem(MEAL_DB, JSON.stringify(mealDatabase));
+    // AsyncStorage.clear();
   }, [date])
 
   // change selected Dashboard date
@@ -130,7 +147,11 @@ export default function Dashboard({ navigation }) {
           }}
         >
           <View style={{ marginStart: 10, marginEnd: 10 }}>
-            <Text variant="headlineLarge">Hello, {name}</Text>
+            <Text variant="headlineLarge">Hello, {userName}</Text>
+
+            {isLoadingMealData ? <ActivityIndicator /> :
+              <Targets mealData={mealData} userWeight={userWeight} userProgram={userProgram} />
+            }
 
             {isLoadingMealData ? <ActivityIndicator /> :
               <IntakeGraph mealData={mealData} />
@@ -146,7 +167,7 @@ export default function Dashboard({ navigation }) {
               <IconButton icon="arrow-right" onPress={() => increaseDate()} />
             </View>
           </View>
-
+          keyboardType="number-pad"
           {isLoadingMealData ?
             <ActivityIndicator /> :
             <MealsView mealData={mealData} year={date.getFullYear()} month={"" + (date.getMonth() + 1 <= 9 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1)} day={date.getDate()} navigation={navigation} />}
