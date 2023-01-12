@@ -5,7 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Dashboard from './app/screens/Dashboard/Dashboard';
 import Wizard from "./app/screens/Wizard/Wizard";
 import AddMeal from './app/screens/AddMeal/AddMeal';
-import ScanBarcode from "./app/screens/ScanBarcode";
+import ScanBarcode from "./app/screens/ScanBarcode/ScanBarcode";
 
 const Stack = createNativeStackNavigator();
 
