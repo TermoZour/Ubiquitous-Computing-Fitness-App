@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Text, FAB, TextInput, Card, IconButton, SegmentedButtons } from "react-native-paper";
 import { MEAL_DB } from "../../constants/StorageKeys";
@@ -118,6 +118,17 @@ export default function AddMeal({ route, navigation }) {
       // search for barcode in database
       const meal = getMeal(barcodeId);
     }
+  })
+
+  // set custom back button to restore normal back behaviour
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <IconButton
+          icon="arrow-left"
+          onPress={() => { navigation.replace("Dashboard") }} />
+      )
+    })
   })
 
 

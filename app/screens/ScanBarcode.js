@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { Button, StyleSheet, View } from 'react-native';
 import { BarCodeScanner } from "expo-barcode-scanner";
+import { IconButton } from 'react-native-paper';
 
 
 export default function ScanBarcode({ route, navigation }) {
@@ -23,6 +24,17 @@ export default function ScanBarcode({ route, navigation }) {
     navigation.replace("AddMeal", { mealType: mealType, mealData: mealData, year: year, month: month, day: day, barcodeId: data });
     // TODO: Change header back arrow to perform same thing as this ^^
   };
+
+  // set custom back button to restore normal back behaviour
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <IconButton
+          icon="arrow-left"
+          onPress={() => { navigation.replace("AddMeal", { mealType: mealType, mealData: mealData, year: year, month: month, day: day }); }} />
+      )
+    })
+  })
 
   return (
     <View style={styles.container}>
