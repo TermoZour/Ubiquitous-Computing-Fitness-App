@@ -167,7 +167,6 @@ export default function Dashboard({ navigation }) {
               <IconButton icon="arrow-right" onPress={() => increaseDate()} />
             </View>
           </View>
-          keyboardType="number-pad"
           {isLoadingMealData ?
             <ActivityIndicator /> :
             <MealsView mealData={mealData} year={date.getFullYear()} month={"" + (date.getMonth() + 1 <= 9 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1)} day={date.getDate()} navigation={navigation} />}
