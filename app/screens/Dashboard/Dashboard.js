@@ -17,6 +17,8 @@ export default function Dashboard({ navigation }) {
   const [mealData, setMealData] = useState();
   const [isLoadingMealData, setIsLoadingMealData] = useState(true);
 
+  const [headerStyle, setHeaderStyle] = useState(styles.mealsHeaderContainer);
+
   const checkWizardStatus = async () => {
     try {
       const wizardState = await AsyncStorage.getItem(WIZARD_STATUS);
@@ -107,7 +109,16 @@ export default function Dashboard({ navigation }) {
     <GestureHandlerRootView style={{ flex: 1 }}>
       {isStartingUp ? <ActivityIndicator /> :
         <ScrollView
-        // stickyHeaderIndices={[1]}  // the header gets weird UI when this is set
+          stickyHeaderIndices={[1]}
+          onScroll={event => {
+            const y = event.nativeEvent.contentOffset.y;
+            if (y >= 240) {
+              setHeaderStyle(styles.mealsHeaderContainerSticky);
+              // TODO: change navigation header shadow to 0
+            } else {
+              setHeaderStyle(styles.mealsHeaderContainer);
+            }
+          }}
         >
           <View style={{ marginStart: 10, marginEnd: 10 }}>
             <Text variant="headlineLarge">Hello, {name}</Text>
@@ -117,27 +128,35 @@ export default function Dashboard({ navigation }) {
               columns={[
                 { title: "protein", value: 120, color: "#ff0000" },
                 { title: "carbs", value: 30, color: "#00ff00" },
-                { title: "fibre", value: 75, color: "#0000ff" }]}
+                { title: "fibre", value: 75, color: "#ffff00" }]}
               maxRange="200" />
           </View>
 
-          <View style={styles.mealsHeaderContainer}>
-            <IconButton icon="arrow-left" onPress={() => decreaseDate()} />
-            <Text style={styles.mealsHeaderText} variant="headlineSmall">Meals of </Text>
-            <Text style={styles.mealsHeaderText} variant="headlineSmall">{date.getDate()}/{date.getMonth() + 1}/{date.getFullYear()}</Text>
-            <IconButton icon="arrow-right" onPress={() => increaseDate()} />
+          <View>
+            <View style={headerStyle}>
+              <IconButton icon="arrow-left" onPress={() => decreaseDate()} />
+              <Text style={styles.mealsHeaderText} variant="headlineSmall">Meals of </Text>
+              <Text style={styles.mealsHeaderText} variant="headlineSmall">{date.getDate()}/{date.getMonth() + 1}/{date.getFullYear()}</Text>
+              <IconButton icon="arrow-right" onPress={() => increaseDate()} />
+            </View>
           </View>
 
           {isLoadingMealData ? <></> : <MealsView mealData={mealData} navigation={navigation} />}
         </ScrollView>
       }
-    </GestureHandlerRootView>
+    </GestureHandlerRootView >
   )
 }
 
 const styles = StyleSheet.create({
   mealsHeaderContainer: {
     flexDirection: "row"
+    // backgroundColor: '#ffffff'
+  },
+  mealsHeaderContainerSticky: {
+    flexDirection: "row",
+    backgroundColor: '#ffffff',
+    elevation: 4
   },
   mealsHeaderText: {
     alignSelf: 'center'
