@@ -41,9 +41,31 @@ export const mealDatabase = [
     "protein_per_serving": 2.1
   },
   {
-    "id": "1",
-    "name": "Breaded Chicken",
-    "grams": 100,
-    "energy_per_100g": 50
+    "id": "5054781871170",
+    "name": "Breaded Chicken Gourjons",
+    "grams": 270,
+    "energy_per_100g": 262,
+    "carbs_per_100g": 14,
+    "fibre_per_100g": 1.4,
+    "protein_per_100g": 16,
+    "servings": 2,
+    "energy_per_serving": 353.7,
+    "carbs_per_serving": 18.9,
+    "fibre_per_serving": 0.7,
+    "protein_per_serving": 2.8
+  },
+  {
+    "id": "5054781557517",
+    "name": "Crunchy Sweet leaf & Carrot Salad",
+    "grams": 240,
+    "energy_per_100g": 25,
+    "carbs_per_100g": 3.2,
+    "fibre_per_100g": 2.5,
+    "protein_per_100g": 1.3,
+    "servings": 2,
+    "energy_per_serving": 12.5,
+    "carbs_per_serving": 1.6,
+    "fibre_per_serving": 1.25,
+    "protein_per_serving": 1.4
   }
 ]
