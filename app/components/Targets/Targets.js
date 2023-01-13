@@ -11,11 +11,6 @@ export default function Targets({ mealData, userWeight, userProgram }) {
 
 
   useEffect(() => {
-    console.log("Targets mealData");
-    console.log(mealData);
-    console.log("program: " + userProgram);
-    console.log("weight: " + userWeight); // kg
-
     switch ("" + userProgram) { // cast to string because of AsyncStorage keys restriction
       case WIZARD_MAINTAIN:
         console.log("Maintaining");
