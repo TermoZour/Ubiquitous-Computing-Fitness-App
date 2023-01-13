@@ -98,6 +98,7 @@ export default function IntakeGraph({ mealData }) {
       } else {
         column.percentage = 100;
       }
+      column.value = column.value.toFixed(2);
     }
 
     setColumns(columns);

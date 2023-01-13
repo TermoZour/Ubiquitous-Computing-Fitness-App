@@ -9,8 +9,8 @@ export default function MealEntry({ meal, entry }) {
         <Text variant="bodyLarge">{meal.name}</Text>
         {/* calories intake */}
         {entry.isGrams ?
-          <Text>{entry.amount / meal.energy_per_100g}kcal</Text> :
-          <Text>{entry.amount * meal.energy_per_serving}kcal</Text>
+          <Text>{(entry.amount / meal.energy_per_100g).toFixed(2)}kcal</Text> :
+          <Text>{(entry.amount * meal.energy_per_serving).toFixed(2)}kcal</Text>
         }
 
         {/* grams intake */}
